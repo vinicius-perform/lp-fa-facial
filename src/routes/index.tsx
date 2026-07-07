@@ -107,6 +107,10 @@ const CASE_STUDIES: CaseStudy[] = [
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
+      {/* Top Banner Exclusivo */}
+      <div className="bg-[#E10614] text-white py-2.5 px-4 text-center text-xs sm:text-sm font-black tracking-widest uppercase shrink-0">
+        *EXCLUSIVO PARA CLÍNICAS E CONSULTÓRIOS QUE FATURAM ACIMA DE 35K/MÊS
+      </div>
       <Hero />
       <Cases />
       <Footer />
