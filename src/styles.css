@@ -1,6 +1,9 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource/instrument-serif";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -31,56 +34,65 @@
   --color-ring: var(--ring);
   --color-neon: var(--neon);
   --color-neon-bright: var(--neon-bright);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
 }
 
 :root {
   --radius: 0.75rem;
   --background: oklch(0.06 0 0);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.11 0 0);
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.11 0 0);
-  --popover-foreground: oklch(1 0 0);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.10 0 0);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.10 0 0);
+  --popover-foreground: oklch(0.98 0 0);
   --primary: oklch(0.9 0.28 132);
   --primary-foreground: oklch(0.06 0 0);
-  --secondary: oklch(0.16 0 0);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.14 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.16 0 0);
-  --accent-foreground: oklch(1 0 0);
+  --secondary: oklch(0.15 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.13 0 0);
+  --muted-foreground: oklch(0.68 0 0);
+  --accent: oklch(0.15 0 0);
+  --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.6 0.22 25);
-  --border: oklch(0.22 0 0);
-  --input: oklch(0.16 0 0);
+  --border: oklch(0.20 0 0);
+  --input: oklch(0.14 0 0);
   --ring: oklch(0.9 0.28 132);
   --neon: oklch(0.9 0.28 132);
   --neon-bright: oklch(0.93 0.28 132);
-  --surface: oklch(0.09 0 0);
-  --surface-2: oklch(0.13 0 0);
 }
 
 .dark { color-scheme: dark; }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: dark; }
+  html { color-scheme: dark; font-family: var(--font-sans); }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
   }
+  .font-display { font-family: var(--font-display); font-feature-settings: "ss02"; letter-spacing: -0.02em; }
+  .font-serif-display { font-family: var(--font-serif); font-style: italic; letter-spacing: -0.01em; }
 }
 
-@utility text-neon {
-  color: #95EC00;
-}
-@utility bg-neon {
-  background-color: #95EC00;
-}
+@utility text-neon { color: #95EC00; }
+@utility bg-neon { background-color: #95EC00; }
 @utility glow-neon {
   box-shadow: 0 0 40px -8px rgba(149, 236, 0, 0.45), 0 0 120px -40px rgba(149, 236, 0, 0.35);
+}
+@utility grain {
+  position: relative;
+}
+@utility grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
 }
