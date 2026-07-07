@@ -191,7 +191,7 @@ function LeadForm({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
     const name = formData.get("name") as string;
     const phone = formData.get("phone") as string;
     const email = formData.get("email") as string;
-    const clinicName = formData.get("clinicName") as string;
+    const clinicInstagram = formData.get("clinicInstagram") as string;
     const objective = formData.get("objective") as string;
     const revenue = formData.get("revenue") as string;
     const traffic = formData.get("traffic") as string;
@@ -235,7 +235,8 @@ function LeadForm({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
       name,
       phone,
       email,
-      clinicName,
+      clinicInstagram,
+      clinicName: clinicInstagram, // Envia também como clinicName para compatibilidade retroativa com planilhas antigas
       objective,
       revenue,
       traffic,
@@ -285,7 +286,7 @@ function LeadForm({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
         <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
         <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
         <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
-        <input required name="clinicName" type="text" placeholder="Nome da sua clínica" className={inputCls} />
+        <input required name="clinicInstagram" type="text" placeholder="Instagram da clínica" className={inputCls} />
 
         <select required name="objective" defaultValue="" className={inputCls}>
           <option value="" disabled>Qual o principal objetivo hoje?</option>
@@ -428,9 +429,9 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
             </div>
 
             {/* Title */}
-            <h3 className="mt-5 text-3xl sm:text-4xl font-black tracking-tight text-foreground uppercase leading-none">
-              Case de sucesso de{" "}
-              <span className="text-neon underline decoration-2 underline-offset-8">
+            <h3 className="mt-5 text-3xl sm:text-4xl font-black tracking-tight text-foreground uppercase leading-tight">
+              Case de sucesso de
+              <span className="block mt-2 text-neon underline decoration-2 underline-offset-8">
                 {study.city}
               </span>
             </h3>
