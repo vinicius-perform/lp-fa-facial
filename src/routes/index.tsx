@@ -145,6 +145,17 @@ function Hero() {
     <section id="topo" className="relative">
       {/* Background abstract */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Foto do Homem como Background com fusão */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://fazendoacontecer.site/wp-content/uploads/2026/07/cc9debfb-a6c7-431b-b55e-668e55a1cdc4.png"
+            alt=""
+            className="w-full h-full object-cover object-center opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/70 to-background" />
+          <div className="absolute inset-0 bg-background/40" />
+        </div>
+
         <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full opacity-30 blur-[140px]" style={{ background: "radial-gradient(circle, #95EC00 0%, transparent 70%)" }} />
         <div className="absolute top-1/3 -right-40 h-[600px] w-[600px] rounded-full opacity-20 blur-[160px]" style={{ background: "radial-gradient(circle, #95EC00 0%, transparent 70%)" }} />
         <div
@@ -158,12 +169,6 @@ function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-4xl px-6 pt-16 pb-24 text-center lg:pt-28 lg:pb-36 flex flex-col items-center">
-        {/* Foto do Homem */}
-        <img
-          src="https://fazendoacontecer.site/wp-content/uploads/2026/07/cc9debfb-a6c7-431b-b55e-668e55a1cdc4.png"
-          alt="Fazendo Acontecer"
-          className="w-full max-w-[280px] sm:max-w-[340px] md:max-w-[400px] h-auto object-contain mb-8 filter drop-shadow-[0_0_30px_rgba(149,236,0,0.15)] animate-fade-in"
-        />
         <h1 className="text-3xl font-black leading-[1.15] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           Aumentamos o <span className="text-neon">faturamento da sua clínica</span> internalizando o seu comercial e implantando a nossa metodologia de <span className="text-neon">geração de demanda, vendas e dados</span>.
         </h1>
