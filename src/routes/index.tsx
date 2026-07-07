@@ -105,15 +105,22 @@ const CASE_STUDIES: CaseStudy[] = [
 ];
 
 function Index() {
+  const [submitted, setSubmitted] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       {/* Top Banner Exclusivo */}
       <div className="bg-[#E10614] text-white py-2.5 px-4 text-center text-xs sm:text-sm font-black tracking-widest uppercase shrink-0">
         *EXCLUSIVO PARA CLÍNICAS E CONSULTÓRIOS QUE FATURAM ACIMA DE 35K/MÊS
       </div>
-      <Hero />
+      <Hero setSubmitted={setSubmitted} />
       <Cases />
       <Footer />
+
+      {/* Modal de Sucesso Renderizado na Raiz (acima de tudo!) */}
+      {submitted && (
+        <SuccessModal onClose={() => setSubmitted(false)} />
+      )}
     </div>
   );
 }
@@ -132,7 +139,7 @@ function Logo() {
   );
 }
 
-function Hero() {
+function Hero({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
   return (
     <section id="topo" className="relative">
       {/* Background abstract */}
@@ -179,7 +186,7 @@ function Hero() {
 
           {/* Right — Form */}
           <div id="form" className="lg:sticky lg:top-8">
-            <LeadForm />
+            <LeadForm setSubmitted={setSubmitted} />
           </div>
         </div>
       </div>
@@ -187,8 +194,7 @@ function Hero() {
   );
 }
 
-function LeadForm() {
-  const [submitted, setSubmitted] = useState(false);
+function LeadForm({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -281,112 +287,111 @@ function LeadForm() {
     "w-full rounded-lg border border-border bg-[#0e0e0e] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-neon focus:ring-2 focus:ring-neon/30";
 
   return (
-    <>
-      <form
-        onSubmit={onSubmit}
-        className="rounded-2xl border border-[#2A2A2A] bg-[#151515] p-6 shadow-2xl sm:p-8"
+    <form
+      onSubmit={onSubmit}
+      className="rounded-2xl border border-[#2A2A2A] bg-[#151515] p-6 shadow-2xl sm:p-8"
+    >
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neon">Vaga limitada</p>
+        <h2 className="mt-2 text-2xl font-bold text-foreground">Solicite seu diagnóstico gratuito</h2>
+      </div>
+
+      <div className="space-y-3">
+        <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
+        <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
+        <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
+        <input required name="clinicName" type="text" placeholder="Nome da sua clínica" className={inputCls} />
+
+        <select required name="objective" defaultValue="" className={inputCls}>
+          <option value="" disabled>Qual o principal objetivo hoje?</option>
+          <option>Atrair mais pacientes qualificados</option>
+          <option>Melhorar o atendimento comercial</option>
+          <option>Vender procedimentos de maior valor</option>
+          <option>Organizar CRM e acompanhamento</option>
+          <option>Aumentar previsibilidade de vendas</option>
+          <option>Ainda não sei exatamente</option>
+        </select>
+
+        <select required name="revenue" defaultValue="" className={inputCls}>
+          <option value="" disabled>Faturamento mensal aproximado da clínica</option>
+          <option>Até R$30 mil/mês</option>
+          <option>R$30 mil a R$80 mil/mês</option>
+          <option>R$80 mil a R$150 mil/mês</option>
+          <option>R$150 mil a R$300 mil/mês</option>
+          <option>Acima de R$300 mil/mês</option>
+        </select>
+
+        <select required name="traffic" defaultValue="" className={inputCls}>
+          <option value="" disabled>Já investe em tráfego pago?</option>
+          <option>Sim, atualmente</option>
+          <option>Já investi, mas parei</option>
+          <option>Ainda não invisto</option>
+          <option>Não sei responder</option>
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon disabled:opacity-50"
       >
-        <div className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neon">Vaga limitada</p>
-          <h2 className="mt-2 text-2xl font-bold text-foreground">Solicite seu diagnóstico gratuito</h2>
-        </div>
+        {isSubmitting ? "Enviando..." : "Quero receber meu diagnóstico"}
+        <ArrowRight className="h-4 w-4" />
+      </button>
 
-        <div className="space-y-3">
-          <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
-          <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
-          <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
-          <input required name="clinicName" type="text" placeholder="Nome da sua clínica" className={inputCls} />
+      <p className="mt-3 text-center text-xs text-muted-foreground">
+        Análise gratuita sujeita à disponibilidade da equipe FA.
+      </p>
+    </form>
+  );
+}
 
-          <select required name="objective" defaultValue="" className={inputCls}>
-            <option value="" disabled>Qual o principal objetivo hoje?</option>
-            <option>Atrair mais pacientes qualificados</option>
-            <option>Melhorar o atendimento comercial</option>
-            <option>Vender procedimentos de maior valor</option>
-            <option>Organizar CRM e acompanhamento</option>
-            <option>Aumentar previsibilidade de vendas</option>
-            <option>Ainda não sei exatamente</option>
-          </select>
-
-          <select required name="revenue" defaultValue="" className={inputCls}>
-            <option value="" disabled>Faturamento mensal aproximado da clínica</option>
-            <option>Até R$30 mil/mês</option>
-            <option>R$30 mil a R$80 mil/mês</option>
-            <option>R$80 mil a R$150 mil/mês</option>
-            <option>R$150 mil a R$300 mil/mês</option>
-            <option>Acima de R$300 mil/mês</option>
-          </select>
-
-          <select required name="traffic" defaultValue="" className={inputCls}>
-            <option value="" disabled>Já investe em tráfego pago?</option>
-            <option>Sim, atualmente</option>
-            <option>Já investi, mas parei</option>
-            <option>Ainda não invisto</option>
-            <option>Não sei responder</option>
-          </select>
-        </div>
-
+function SuccessModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+      <div className="relative w-full max-w-4xl h-[85vh] rounded-2xl border border-neon/30 bg-[#111111]/95 p-5 md:p-6 flex flex-col shadow-[0_0_80px_-10px_rgba(149,236,0,0.3)] backdrop-blur-xl animate-fade-in">
+        {/* Botão de Fechar no topo */}
         <button
-          type="submit"
-          disabled={isSubmitting}
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon disabled:opacity-50"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors text-lg font-bold z-10 bg-black/40 h-8 w-8 rounded-full flex items-center justify-center backdrop-blur-sm"
         >
-          {isSubmitting ? "Enviando..." : "Quero receber meu diagnóstico"}
-          <ArrowRight className="h-4 w-4" />
+          ✕
         </button>
 
-        <p className="mt-3 text-center text-xs text-muted-foreground">
-          Análise gratuita sujeita à disponibilidade da equipe FA.
-        </p>
-      </form>
-
-      {/* Modal Popup de Sucesso com Cal.com integrado */}
-      {submitted && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="relative w-full max-w-4xl h-[85vh] rounded-2xl border border-neon/30 bg-[#111111]/95 p-5 md:p-6 flex flex-col shadow-[0_0_80px_-10px_rgba(149,236,0,0.3)] backdrop-blur-xl animate-fade-in">
-            {/* Botão de Fechar no topo */}
-            <button
-              onClick={() => setSubmitted(false)}
-              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors text-lg font-bold z-10 bg-black/40 h-8 w-8 rounded-full flex items-center justify-center backdrop-blur-sm"
-            >
-              ✕
-            </button>
-
-            {/* Cabeçalho do modal */}
-            <div className="pr-10">
-              <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground uppercase flex items-center gap-2">
-                <span className="text-neon">Parabéns pelo cadastro! 🎉</span>
-              </h3>
-              <p className="mt-1 text-xs sm:text-sm text-muted-foreground leading-snug">
-                Agende a sua reunião de diagnóstico de 30 minutos selecionando o melhor dia e horário abaixo:
-              </p>
-            </div>
-
-            {/* Iframe do Cal.com */}
-            <div className="flex-1 mt-4 rounded-xl border border-border/40 overflow-hidden bg-background relative min-h-0">
-              <iframe
-                src="https://cal.com/fazendoacontecer/30min"
-                style={{ width: "100%", height: "100%", border: "none" }}
-                title="Agendamento Diagnóstico FA"
-              />
-            </div>
-
-            {/* Rodapé com Instagram */}
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/30 pt-4 text-xs text-muted-foreground shrink-0">
-              <span>* Nosso time comercial também tentará ligar para você em alguns minutos.</span>
-              <a
-                href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fazendoacontecer.ofc/"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-bold text-neon hover:underline"
-              >
-                <Instagram className="h-3.5 w-3.5" />
-                Seguir no Instagram
-              </a>
-            </div>
-          </div>
+        {/* Cabeçalho do modal */}
+        <div className="pr-10">
+          <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground uppercase flex items-center gap-2">
+            <span className="text-neon">Parabéns pelo cadastro! 🎉</span>
+          </h3>
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground leading-snug">
+            Agende a sua reunião de diagnóstico de 30 minutos selecionando o melhor dia e horário abaixo:
+          </p>
         </div>
-      )}
-    </>
+
+        {/* Iframe do Cal.com */}
+        <div className="flex-1 mt-4 rounded-xl border border-border/40 overflow-hidden bg-background relative min-h-0">
+          <iframe
+            src="https://cal.com/fazendoacontecer/30min"
+            style={{ width: "100%", height: "100%", border: "none" }}
+            title="Agendamento Diagnóstico FA"
+          />
+        </div>
+
+        {/* Rodapé com Instagram */}
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/30 pt-4 text-xs text-muted-foreground shrink-0">
+          <span>* Nosso time comercial também tentará ligar para você em alguns minutos.</span>
+          <a
+            href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fazendoacontecer.ofc/"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 font-bold text-neon hover:underline"
+          >
+            <Instagram className="h-3.5 w-3.5" />
+            Seguir no Instagram
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 
