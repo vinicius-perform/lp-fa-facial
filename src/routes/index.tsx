@@ -362,7 +362,7 @@ function LeadForm() {
 
             <div className="mt-8 space-y-3">
               <a
-                href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fa.fazendoacontecer"}
+                href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fazendoacontecer.ofc/"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
