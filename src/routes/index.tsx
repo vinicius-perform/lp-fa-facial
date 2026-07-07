@@ -156,26 +156,11 @@ function Hero({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-8 pb-20 lg:pt-10 lg:pb-28">
-        <header className="flex items-center justify-between">
-          <Logo />
-          <a
-            href="#form"
-            className="hidden text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline"
-          >
-            Diagnóstico gratuito →
-          </a>
-        </header>
-
-        <div className="mt-14 grid gap-14 lg:mt-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div className="relative mx-auto max-w-7xl px-6 pt-12 sm:pt-16 pb-20 lg:pt-24 lg:pb-28">
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           {/* Left */}
           <div className="min-w-0">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-neon" />
-              Para clínicas de estética e alta performance
-            </div>
-
-            <h1 className="mt-6 text-3xl font-black leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-black leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Aumentamos o <span className="text-neon">faturamento da sua clínica</span> internalizando o seu comercial e implantando a nossa metodologia de <span className="text-neon">geração de demanda, vendas e dados</span>.
             </h1>
 
