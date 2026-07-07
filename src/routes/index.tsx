@@ -169,7 +169,7 @@ function Hero() {
       />
 
       {/* ===== CONTENT ===== */}
-      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-36">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 pt-[52vh] sm:pt-[45vh] lg:pt-28 pb-16 lg:pb-36">
         <div className="max-w-2xl">
           <h1 className="text-[28px] sm:text-4xl lg:text-5xl font-black leading-[1.08] lg:leading-[1.1] tracking-tight text-foreground text-center sm:text-left">
             Aumentamos o <span className="text-neon">faturamento da sua clínica</span> internalizando o seu comercial e implantando a nossa metodologia de <span className="text-neon">geração de demanda, vendas e dados</span>.
