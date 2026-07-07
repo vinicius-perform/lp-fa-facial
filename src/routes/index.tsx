@@ -249,7 +249,7 @@ function LeadForm() {
 
     try {
       // Endpoint webhook configurável via env ou direto no código
-      const WEBHOOK_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbxKuvG4Dn1m5L1uRmOhOx8lVqHJKyn1D488N3peSq7nlnRGwXpxO3m2oD6l-p7iXnAZ/exec";
+      const WEBHOOK_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbxzxSGNIoE8D1gkCctxIdziyTBJ-1V8WKgB9A72eKpBNnwl9NheI2NzmBf_SayJAtwi6w/exec";
       
       if (WEBHOOK_URL) {
         await fetch(WEBHOOK_URL, {
