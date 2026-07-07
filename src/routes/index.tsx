@@ -145,17 +145,6 @@ function Hero() {
     <section id="topo" className="relative">
       {/* Background abstract */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Foto do Homem como Background com fusão */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://fazendoacontecer.site/wp-content/uploads/2026/07/cc9debfb-a6c7-431b-b55e-668e55a1cdc4.png"
-            alt=""
-            className="w-full h-full object-cover object-center opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/70 to-background" />
-          <div className="absolute inset-0 bg-background/40" />
-        </div>
-
         <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full opacity-30 blur-[140px]" style={{ background: "radial-gradient(circle, #95EC00 0%, transparent 70%)" }} />
         <div className="absolute top-1/3 -right-40 h-[600px] w-[600px] rounded-full opacity-20 blur-[160px]" style={{ background: "radial-gradient(circle, #95EC00 0%, transparent 70%)" }} />
         <div
@@ -168,21 +157,35 @@ function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-4xl px-6 pt-16 pb-24 text-center lg:pt-28 lg:pb-36 flex flex-col items-center">
-        <h1 className="text-3xl font-black leading-[1.15] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-          Aumentamos o <span className="text-neon">faturamento da sua clínica</span> internalizando o seu comercial e implantando a nossa metodologia de <span className="text-neon">geração de demanda, vendas e dados</span>.
-        </h1>
-        <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-xl font-medium">
-          Entregamos o paciente na sua agenda para você realizar a consulta e fechar seu protocolo ou procedimento.
-        </p>
-        <div className="mt-10">
-          <a
-            href="#form"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-neon px-8 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
-          >
-            Quero receber meu diagnóstico
-            <ArrowRight className="h-4 w-4" />
-          </a>
+      <div className="relative mx-auto max-w-7xl px-6 pt-12 sm:pt-16 pb-20 lg:pt-24 lg:pb-28">
+        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:items-center">
+          {/* Left Column — Text */}
+          <div className="min-w-0 text-left flex flex-col items-start">
+            <h1 className="text-3xl font-black leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-5xl">
+              Aumentamos o <span className="text-neon">faturamento da sua clínica</span> internalizando o seu comercial e implantando a nossa metodologia de <span className="text-neon">geração de demanda, vendas e dados</span>.
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg font-medium">
+              Entregamos o paciente na sua agenda para você realizar a consulta e fechar seu protocolo ou procedimento.
+            </p>
+            <div className="mt-8">
+              <a
+                href="#form"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-neon px-8 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
+              >
+                Quero receber meu diagnóstico
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Column — Photo of the Man */}
+          <div className="w-full flex justify-center lg:justify-end">
+            <img
+              src="https://fazendoacontecer.site/wp-content/uploads/2026/07/cc9debfb-a6c7-431b-b55e-668e55a1cdc4.png"
+              alt="Fazendo Acontecer"
+              className="w-full max-w-[280px] sm:max-w-[340px] lg:max-w-full h-auto object-contain rounded-2xl filter drop-shadow-[0_0_40px_rgba(149,236,0,0.15)] animate-fade-in"
+            />
+          </div>
         </div>
       </div>
     </section>
