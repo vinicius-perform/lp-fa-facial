@@ -157,7 +157,7 @@ function Hero({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 pt-12 sm:pt-16 pb-20 lg:pt-24 lg:pb-28">
-        <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:items-center">
           {/* Left */}
           <div className="min-w-0">
             <h1 className="text-3xl font-black leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
