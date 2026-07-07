@@ -189,7 +189,7 @@ function Hero() {
             <img
               src="https://fazendoacontecer.site/wp-content/uploads/2026/07/cc9debfb-a6c7-431b-b55e-668e55a1cdc4.png"
               alt="Fazendo Acontecer"
-              className="w-full h-full object-cover object-[center_25%] lg:w-auto lg:h-auto lg:max-w-full lg:object-contain filter lg:drop-shadow-[0_0_40px_rgba(149,236,0,0.15)] animate-fade-in relative z-10"
+              className="w-full h-full object-cover object-top lg:w-auto lg:h-auto lg:max-w-full lg:object-contain filter lg:drop-shadow-[0_0_40px_rgba(149,236,0,0.15)] animate-fade-in relative z-10"
             />
             {/* Gradient overlay on mobile to transition smoothly to black background */}
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background via-background/60 to-transparent lg:hidden z-20" />
