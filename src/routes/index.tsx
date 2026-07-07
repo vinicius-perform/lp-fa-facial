@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent, type ReactNode } from "react";
-import { ArrowRight, Play, DollarSign, TrendingUp, Target, Check } from "lucide-react";
+import { ArrowRight, Play, DollarSign, TrendingUp, Target, Check, Instagram } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -191,7 +191,8 @@ function LeadForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     const name = formData.get("name") as string;
     const phone = formData.get("phone") as string;
     const email = formData.get("email") as string;
@@ -267,6 +268,7 @@ function LeadForm() {
       console.error("Erro ao enviar dados para a planilha:", error);
     } finally {
       setIsSubmitting(false);
+      formElement.reset();
       setSubmitted(true);
     }
   };
@@ -274,77 +276,111 @@ function LeadForm() {
   const inputCls =
     "w-full rounded-lg border border-border bg-[#0e0e0e] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-neon focus:ring-2 focus:ring-neon/30";
 
-  if (submitted) {
-    return (
-      <div className="rounded-2xl border border-border bg-[#151515] p-8 shadow-2xl">
-        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-neon">
-          <ArrowRight className="h-5 w-5 text-black" />
-        </div>
-        <h3 className="text-xl font-bold text-foreground">Solicitação recebida.</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Nossa equipe entrará em contato em breve para agendar seu Diagnóstico Estratégico.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <form
-      onSubmit={onSubmit}
-      className="rounded-2xl border border-[#2A2A2A] bg-[#151515] p-6 shadow-2xl sm:p-8"
-    >
-      <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neon">Vaga limitada</p>
-        <h2 className="mt-2 text-2xl font-bold text-foreground">Solicite seu diagnóstico gratuito</h2>
-      </div>
-
-      <div className="space-y-3">
-        <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
-        <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
-        <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
-        <input required name="clinicName" type="text" placeholder="Nome da sua clínica" className={inputCls} />
-
-        <select required name="objective" defaultValue="" className={inputCls}>
-          <option value="" disabled>Qual o principal objetivo hoje?</option>
-          <option>Atrair mais pacientes qualificados</option>
-          <option>Melhorar o atendimento comercial</option>
-          <option>Vender procedimentos de maior valor</option>
-          <option>Organizar CRM e acompanhamento</option>
-          <option>Aumentar previsibilidade de vendas</option>
-          <option>Ainda não sei exatamente</option>
-        </select>
-
-        <select required name="revenue" defaultValue="" className={inputCls}>
-          <option value="" disabled>Faturamento mensal aproximado da clínica</option>
-          <option>Até R$30 mil/mês</option>
-          <option>R$30 mil a R$80 mil/mês</option>
-          <option>R$80 mil a R$150 mil/mês</option>
-          <option>R$150 mil a R$300 mil/mês</option>
-          <option>Acima de R$300 mil/mês</option>
-        </select>
-
-        <select required name="traffic" defaultValue="" className={inputCls}>
-          <option value="" disabled>Já investe em tráfego pago?</option>
-          <option>Sim, atualmente</option>
-          <option>Já investi, mas parei</option>
-          <option>Ainda não invisto</option>
-          <option>Não sei responder</option>
-        </select>
-      </div>
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon disabled:opacity-50"
+    <>
+      <form
+        onSubmit={onSubmit}
+        className="rounded-2xl border border-[#2A2A2A] bg-[#151515] p-6 shadow-2xl sm:p-8"
       >
-        {isSubmitting ? "Enviando..." : "Quero receber meu diagnóstico"}
-        <ArrowRight className="h-4 w-4" />
-      </button>
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neon">Vaga limitada</p>
+          <h2 className="mt-2 text-2xl font-bold text-foreground">Solicite seu diagnóstico gratuito</h2>
+        </div>
 
-      <p className="mt-3 text-center text-xs text-muted-foreground">
-        Análise gratuita sujeita à disponibilidade da equipe FA.
-      </p>
-    </form>
+        <div className="space-y-3">
+          <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
+          <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
+          <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
+          <input required name="clinicName" type="text" placeholder="Nome da sua clínica" className={inputCls} />
+
+          <select required name="objective" defaultValue="" className={inputCls}>
+            <option value="" disabled>Qual o principal objetivo hoje?</option>
+            <option>Atrair mais pacientes qualificados</option>
+            <option>Melhorar o atendimento comercial</option>
+            <option>Vender procedimentos de maior valor</option>
+            <option>Organizar CRM e acompanhamento</option>
+            <option>Aumentar previsibilidade de vendas</option>
+            <option>Ainda não sei exatamente</option>
+          </select>
+
+          <select required name="revenue" defaultValue="" className={inputCls}>
+            <option value="" disabled>Faturamento mensal aproximado da clínica</option>
+            <option>Até R$30 mil/mês</option>
+            <option>R$30 mil a R$80 mil/mês</option>
+            <option>R$80 mil a R$150 mil/mês</option>
+            <option>R$150 mil a R$300 mil/mês</option>
+            <option>Acima de R$300 mil/mês</option>
+          </select>
+
+          <select required name="traffic" defaultValue="" className={inputCls}>
+            <option value="" disabled>Já investe em tráfego pago?</option>
+            <option>Sim, atualmente</option>
+            <option>Já investi, mas parei</option>
+            <option>Ainda não invisto</option>
+            <option>Não sei responder</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon disabled:opacity-50"
+        >
+          {isSubmitting ? "Enviando..." : "Quero receber meu diagnóstico"}
+          <ArrowRight className="h-4 w-4" />
+        </button>
+
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          Análise gratuita sujeita à disponibilidade da equipe FA.
+        </p>
+      </form>
+
+      {/* Modal Popup de Sucesso */}
+      {submitted && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="relative w-full max-w-md rounded-2xl border border-neon/30 bg-[#111111]/90 p-8 text-center shadow-[0_0_80px_-10px_rgba(149,236,0,0.3)] backdrop-blur-xl animate-fade-in">
+            {/* Botão de Fechar no topo */}
+            <button
+              onClick={() => setSubmitted(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors text-lg font-bold"
+            >
+              ✕
+            </button>
+
+            {/* Ícone de sucesso verde neon */}
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-neon/10 border border-neon/40 text-neon shadow-[0_0_30px_rgba(149,236,0,0.2)]">
+              <Check className="h-8 w-8 stroke-[3]" />
+            </div>
+
+            <h3 className="text-2xl font-black tracking-tight text-foreground uppercase">
+              Parabéns pelo cadastro! 🎉
+            </h3>
+            
+            <p className="mt-4 text-muted-foreground leading-relaxed text-sm sm:text-base">
+              Nosso time entrará em contato com você via ligação em alguns minutos. Fique atento ao seu telefone!
+            </p>
+
+            <div className="mt-8 space-y-3">
+              <a
+                href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fa.fazendoacontecer"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
+              >
+                <Instagram className="h-4 w-4" />
+                Seguir no Instagram
+              </a>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="w-full py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Fechar janela
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
