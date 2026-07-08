@@ -106,6 +106,12 @@ const CASE_STUDIES: CaseStudy[] = [
 
 const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL || "https://wa.link/fwz6x2";
 
+const trackLead = () => {
+  if (typeof window !== "undefined" && (window as any).fbq) {
+    (window as any).fbq("track", "Lead");
+  }
+};
+
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
@@ -168,6 +174,7 @@ function Hero() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={trackLead}
                 className="inline-flex w-full max-w-sm lg:w-auto h-[54px] sm:h-[58px] items-center justify-center gap-2 rounded-lg bg-neon px-8 text-sm sm:text-base font-extrabold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
               >
                 Quero receber meu diagnóstico
@@ -205,6 +212,7 @@ function Cases() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={trackLead}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-neon px-8 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
         >
           Quero receber meu diagnóstico
