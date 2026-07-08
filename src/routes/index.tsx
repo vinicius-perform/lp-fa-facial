@@ -104,9 +104,9 @@ const CASE_STUDIES: CaseStudy[] = [
   },
 ];
 
-function Index() {
-  const [submitted, setSubmitted] = useState(false);
+const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL || "https://wa.me/5511952453638";
 
+function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       {/* Top Banner Exclusivo */}
@@ -115,13 +115,7 @@ function Index() {
       </div>
       <Hero />
       <Cases />
-      <FormSection setSubmitted={setSubmitted} />
       <Footer />
-
-      {/* Modal de Sucesso Renderizado na Raiz (acima de tudo!) */}
-      {submitted && (
-        <SuccessModal onClose={() => setSubmitted(false)} />
-      )}
     </div>
   );
 }
@@ -171,7 +165,9 @@ function Hero() {
             </p>
             <div className="mt-10 flex w-full justify-center lg:justify-start">
               <a
-                href="#form"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex w-full max-w-sm lg:w-auto h-[54px] sm:h-[58px] items-center justify-center gap-2 rounded-lg bg-neon px-8 text-sm sm:text-base font-extrabold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
               >
                 Quero receber meu diagnóstico
@@ -185,207 +181,7 @@ function Hero() {
   );
 }
 
-function LeadForm({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const formElement = e.currentTarget;
-    const formData = new FormData(formElement);
-    const name = formData.get("name") as string;
-    const phone = formData.get("phone") as string;
-    const email = formData.get("email") as string;
-    const clinicInstagram = formData.get("clinicInstagram") as string;
-    const objective = formData.get("objective") as string;
-    const revenue = formData.get("revenue") as string;
-    const traffic = formData.get("traffic") as string;
-
-    // Lógica de cálculo do Lead Score
-    let score = 0;
-
-    // Faturamento
-    if (revenue === "Até R$30 mil/mês") score += 10;
-    else if (revenue === "R$30 mil a R$80 mil/mês") score += 25;
-    else if (revenue === "R$80 mil a R$150 mil/mês") score += 50;
-    else if (revenue === "R$150 mil a R$300 mil/mês") score += 75;
-    else if (revenue === "Acima de R$300 mil/mês") score += 100;
-
-    // Tráfego Pago
-    if (traffic === "Sim, atualmente") score += 30;
-    else if (traffic === "Já investi, mas parei") score += 20;
-    else if (traffic === "Ainda não invisto") score += 10;
-    else if (traffic === "Não sei responder") score += 5;
-
-    // Objetivo principal
-    if (objective === "Vender procedimentos de maior valor") score += 20;
-    else if (objective === "Aumentar previsibilidade de vendas") score += 20;
-    else if (objective === "Atrair mais pacientes qualificados") score += 15;
-    else if (objective === "Melhorar o atendimento comercial") score += 15;
-    else if (objective === "Organizar CRM e acompanhamento") score += 10;
-    else if (objective === "Ainda não sei exatamente") score += 5;
-
-    // Classificação do Tipo de Lead
-    let leadType: "A" | "B" | "C" = "C";
-    if (score >= 85) {
-      leadType = "A";
-    } else if (score >= 50) {
-      leadType = "B";
-    } else {
-      leadType = "C";
-    }
-
-    const payload = {
-      timestamp: new Date().toLocaleString("pt-BR"),
-      name,
-      phone,
-      email,
-      clinicInstagram,
-      clinicName: clinicInstagram, // Envia também como clinicName para compatibilidade retroativa com planilhas antigas
-      objective,
-      revenue,
-      traffic,
-      score,
-      leadType,
-    };
-
-    try {
-      // Endpoint webhook configurável via env ou direto no código
-      const WEBHOOK_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbxzxSGNIoE8D1gkCctxIdziyTBJ-1V8WKgB9A72eKpBNnwl9NheI2NzmBf_SayJAtwi6w/exec";
-      
-      if (WEBHOOK_URL) {
-        await fetch(WEBHOOK_URL, {
-          method: "POST",
-          mode: "no-cors", // Necessário para evitar bloqueio CORS com Google Apps Script
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-          body: JSON.stringify(payload),
-        });
-      } else {
-        console.log("Planilha não configurada nas variáveis de ambiente. Dados locais do Lead:", payload);
-      }
-    } catch (error) {
-      console.error("Erro ao enviar dados para a planilha:", error);
-    } finally {
-      setIsSubmitting(false);
-      formElement.reset();
-      setSubmitted(true);
-    }
-  };
-
-  const inputCls =
-    "w-full rounded-lg border border-border bg-[#0e0e0e] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-neon focus:ring-2 focus:ring-neon/30";
-
-  return (
-    <form
-      onSubmit={onSubmit}
-      className="rounded-2xl border border-[#2A2A2A] bg-[#151515] p-6 shadow-2xl sm:p-8"
-    >
-      <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neon">Vaga limitada</p>
-        <h2 className="mt-2 text-2xl font-bold text-foreground">Solicite seu diagnóstico gratuito</h2>
-      </div>
-
-      <div className="space-y-3">
-        <input required name="name" type="text" placeholder="Nome completo" className={inputCls} />
-        <input required name="phone" type="tel" placeholder="Número de telefone" className={inputCls} />
-        <input required name="email" type="email" placeholder="E-mail" className={inputCls} />
-        <input required name="clinicInstagram" type="text" placeholder="Instagram da clínica" className={inputCls} />
-
-        <select required name="objective" defaultValue="" className={inputCls}>
-          <option value="" disabled>Qual o principal objetivo hoje?</option>
-          <option>Atrair mais pacientes qualificados</option>
-          <option>Melhorar o atendimento comercial</option>
-          <option>Vender procedimentos de maior valor</option>
-          <option>Organizar CRM e acompanhamento</option>
-          <option>Aumentar previsibilidade de vendas</option>
-          <option>Ainda não sei exatamente</option>
-        </select>
-
-        <select required name="revenue" defaultValue="" className={inputCls}>
-          <option value="" disabled>Faturamento mensal aproximado da clínica</option>
-          <option>Até R$30 mil/mês</option>
-          <option>R$30 mil a R$80 mil/mês</option>
-          <option>R$80 mil a R$150 mil/mês</option>
-          <option>R$150 mil a R$300 mil/mês</option>
-          <option>Acima de R$300 mil/mês</option>
-        </select>
-
-        <select required name="traffic" defaultValue="" className={inputCls}>
-          <option value="" disabled>Já investe em tráfego pago?</option>
-          <option>Sim, atualmente</option>
-          <option>Já investi, mas parei</option>
-          <option>Ainda não invisto</option>
-          <option>Não sei responder</option>
-        </select>
-      </div>
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-6 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon disabled:opacity-50"
-      >
-        {isSubmitting ? "Enviando..." : "Quero receber meu diagnóstico"}
-        <ArrowRight className="h-4 w-4" />
-      </button>
-
-      <p className="mt-3 text-center text-xs text-muted-foreground">
-        Análise gratuita sujeita à disponibilidade da equipe FA.
-      </p>
-    </form>
-  );
-}
-
-function SuccessModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="relative w-full max-w-4xl h-[85vh] rounded-2xl border border-neon/30 bg-[#111111]/95 p-5 md:p-6 flex flex-col shadow-[0_0_80px_-10px_rgba(149,236,0,0.3)] backdrop-blur-xl animate-fade-in">
-        {/* Botão de Fechar no topo */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors text-lg font-bold z-10 bg-black/40 h-8 w-8 rounded-full flex items-center justify-center backdrop-blur-sm"
-        >
-          ✕
-        </button>
-
-        {/* Cabeçalho do modal */}
-        <div className="pr-10">
-          <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground uppercase flex items-center gap-2">
-            <span className="text-neon">Parabéns pelo cadastro! 🎉</span>
-          </h3>
-          <p className="mt-1 text-xs sm:text-sm text-muted-foreground leading-snug">
-            Agende a sua reunião de diagnóstico de 30 minutos selecionando o melhor dia e horário abaixo:
-          </p>
-        </div>
-
-        {/* Iframe do Cal.com */}
-        <div className="flex-1 mt-4 rounded-xl border border-border/40 overflow-hidden bg-background relative min-h-0">
-          <iframe
-            src="https://cal.com/fazendoacontecer/30min"
-            style={{ width: "100%", height: "100%", border: "none" }}
-            title="Agendamento Diagnóstico FA"
-          />
-        </div>
-
-        {/* Rodapé com Instagram */}
-        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/30 pt-4 text-xs text-muted-foreground shrink-0">
-          <span>* Nosso time comercial também tentará ligar para você em alguns minutos.</span>
-          <a
-            href={import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/fazendoacontecer.ofc/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-bold text-neon hover:underline"
-          >
-            <Instagram className="h-3.5 w-3.5" />
-            Seguir no Instagram
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function Cases() {
   return (
@@ -406,7 +202,9 @@ function Cases() {
 
       <div className="mt-20 flex justify-center pt-8">
         <a
-          href="#form"
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-neon px-8 py-4 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-[#B6FF35] glow-neon"
         >
           Quero receber meu diagnóstico
@@ -569,20 +367,7 @@ function CaseVideo({ videoUrl, thumbnail }: { videoUrl: string; thumbnail?: stri
   );
 }
 
-function FormSection({ setSubmitted }: { setSubmitted: (val: boolean) => void }) {
-  return (
-    <section id="form" className="relative border-t border-border/50 bg-[#090909]/40 py-20 lg:py-28">
-      {/* Background glow effects for the form section */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full opacity-10 blur-[130px]" style={{ background: "radial-gradient(circle, #95EC00 0%, transparent 70%)" }} />
-      </div>
 
-      <div className="relative mx-auto max-w-xl px-6">
-        <LeadForm setSubmitted={setSubmitted} />
-      </div>
-    </section>
-  );
-}
 
 function Footer() {
   return (
