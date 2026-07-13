@@ -245,10 +245,7 @@ function Index() {
         <VideoModal videoUrl={activeVideoUrl} onClose={handleCloseVideo} />
       )}
 
-      {/* 25. Modal / Página de Confirmação */}
-      {submitted && (
-        <SuccessModal leadName={leadName} onClose={() => setSubmitted(false)} />
-      )}
+      {/* Redirecionamento direto ativo */}
 
     </div>
   );
@@ -617,12 +614,17 @@ function MultistepForm({ setSubmitted, setLeadName, utms }: MultistepFormProps) 
             lead_type: leadType
           });
         }
+
+        // Redirecionamento direto para o WhatsApp
+        window.location.href = "https://wa.link/wl1a3w";
       }
     } catch (error) {
       console.error("Erro ao enviar lead:", error);
+      if (typeof window !== "undefined") {
+        window.location.href = "https://wa.link/wl1a3w";
+      }
     } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
     }
   };
 
