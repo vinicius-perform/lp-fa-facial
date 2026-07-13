@@ -606,6 +606,10 @@ function MultistepForm({ setSubmitted, setLeadName, utms }: MultistepFormProps) 
             currency: "BRL",
             predicted_lead_type: leadType
           });
+          win.fbq("trackCustom", "LeadForm", {
+            content_name: "Diagnostico FA Hibrido",
+            predicted_lead_type: leadType
+          });
         }
         if (win.dataLayer && Array.isArray(win.dataLayer)) {
           win.dataLayer.push({
