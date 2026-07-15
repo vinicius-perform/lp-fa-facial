@@ -746,24 +746,24 @@ function CasePrincipalSection({ onOpenVideo }: CasePrincipalSectionProps) {
   };
 
   return (
-    <section className="bg-[#050705] border-b border-[#252A25] py-14 lg:py-20 text-[#F4F6F1]">
+    <section className="bg-[#050705] border-b border-[#252A25] py-12 lg:py-16 text-[#F4F6F1]">
       <div className="mx-auto max-w-5xl px-5 sm:px-6">
         
-        <div className="text-center mb-10 max-w-3xl mx-auto">
+        <div className="text-center mb-8 max-w-3xl mx-auto">
           <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
             PROVA, NÃO APENAS PROMESSA
           </span>
-          <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
-            Veja o que pode acontecer quando marketing, atendimento e acompanhamento deixam de trabalhar separados.
+          <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
+            Veja o que acontece quando marketing e vendas trabalham juntos.
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-6 sm:p-9 flex flex-col md:flex-row items-center gap-8 shadow-xl text-left">
+        <div className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-6 sm:p-8 flex flex-col md:flex-row items-center gap-8 shadow-xl text-left max-w-4xl mx-auto">
           
-          <div className="w-full md:w-[240px] shrink-0">
+          <div className="w-full md:w-[220px] shrink-0">
             <div 
               onClick={() => onOpenVideo(caseDestaque.videoUrl)}
-              className="group relative aspect-[9/16] w-full max-w-[200px] mx-auto rounded-xl border border-[#252A25] bg-[#050705] overflow-hidden cursor-pointer shadow-lg hover:border-[#8CFF00]/40 transition-all"
+              className="group relative aspect-[9/16] w-full max-w-[190px] mx-auto rounded-xl border border-[#252A25] bg-[#050705] overflow-hidden cursor-pointer shadow-lg hover:border-[#8CFF00]/60 transition-all"
             >
               <img 
                 src={caseDestaque.thumbnail} 
@@ -772,34 +772,22 @@ function CasePrincipalSection({ onOpenVideo }: CasePrincipalSectionProps) {
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] shadow-lg">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] shadow-lg group-hover:scale-110 transition-transform">
                   <Play className="h-5 w-5 fill-[#050705] translate-x-0.5" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col">
-            <div className="text-xs font-black uppercase tracking-widest text-[#8CFF00]">{caseDestaque.specialty}</div>
-            <h3 className="mt-1 text-xl font-black text-[#FFFFFF]">Case {caseDestaque.name} — {caseDestaque.city}</h3>
+          <div className="flex-1 flex flex-col justify-center">
+            <h3 className="text-xl sm:text-2xl font-black text-[#FFFFFF]">
+              {caseDestaque.name} <span className="text-sm font-semibold text-[#667066] ml-1">— {caseDestaque.city}</span>
+            </h3>
 
-            <div className="mt-4 p-4 rounded-xl bg-[#050705] border border-[#8CFF00]/40">
-              <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#8CFF00]">Resultado Principal</span>
-              <span className="block mt-0.5 text-2xl sm:text-3xl font-black text-[#FFFFFF]">{caseDestaque.stats.revenue}</span>
-            </div>
-
-            <p className="mt-4 text-xs sm:text-sm text-[#F4F6F1]/90 font-medium leading-relaxed">
-              <strong>Contexto:</strong> {caseDestaque.previousScenario}
-            </p>
-
-            <div className="mt-4 space-y-2">
-              <p className="text-xs font-bold text-[#667066] uppercase tracking-wider">Três Ações Implantadas:</p>
-              {caseDestaque.actions.map((act, idx) => (
-                <div key={idx} className="flex items-center gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-[#8CFF00] shrink-0" />
-                  <span className="text-xs sm:text-sm text-[#F4F6F1] font-semibold">{act}</span>
-                </div>
-              ))}
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#8CFF00] block tracking-tight">
+                {caseDestaque.stats.revenue}
+              </span>
             </div>
 
             <div className="mt-6">
@@ -881,21 +869,21 @@ function ResultadosReaisSection({ onOpenVideo }: ResultadosReaisSectionProps) {
   const provas = CASE_STUDIES.slice(1, 4);
 
   return (
-    <section className="bg-[#050705] border-b border-[#252A25] py-14 lg:py-20 text-[#F4F6F1]">
+    <section className="bg-[#050705] border-b border-[#252A25] py-12 lg:py-16 text-[#F4F6F1]">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         
-        <div className="text-center mb-10 max-w-3xl mx-auto">
+        <div className="text-center mb-8 max-w-3xl mx-auto">
           <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
             OUTRAS OPERAÇÕES
           </span>
-          <h2 className="mt-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
+          <h2 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
             Resultados reais de quem já aplicou a estratégia
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
           {provas.map((c) => (
-            <div key={c.id} className="rounded-xl border border-[#252A25] bg-[#0B0E0B] p-5 flex flex-col justify-between shadow-md">
+            <div key={c.id} className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-5 flex flex-col justify-between shadow-md hover:border-[#8CFF00]/40 transition-colors">
               <div>
                 <div 
                   onClick={() => onOpenVideo(c.videoUrl)}
@@ -906,27 +894,19 @@ function ResultadosReaisSection({ onOpenVideo }: ResultadosReaisSectionProps) {
                     alt={c.name} 
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black/20" />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] group-hover:scale-110 transition-transform">
                       <Play className="h-4 w-4 fill-[#050705] translate-x-0.5" />
                     </div>
                   </div>
                 </div>
 
-                <h3 className="text-base font-extrabold text-[#FFFFFF]">{c.name} — {c.city}</h3>
-                
-                <div className="mt-2 p-2.5 rounded-lg bg-[#050705] border border-[#252A25]">
-                  <span className="block text-[9px] font-extrabold uppercase tracking-wider text-[#667066]">Principal Resultado</span>
-                  <span className="block text-base font-black text-[#8CFF00]">{c.stats.revenue}</span>
-                </div>
-
-                <p className="mt-3 text-xs text-[#F4F6F1]/80 leading-relaxed font-medium">
-                  {c.previousScenario}
-                </p>
+                <h3 className="text-sm font-extrabold text-[#FFFFFF]">{c.name} <span className="text-xs font-normal text-[#667066] ml-0.5">— {c.city}</span></h3>
+                <span className="block mt-1 text-lg font-black text-[#8CFF00]">{c.stats.revenue}</span>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 pt-3 border-t border-[#252A25]/60">
                 <button
                   onClick={() => onOpenVideo(c.videoUrl)}
                   className="w-full h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#252A25] bg-[#050705] text-xs font-bold text-[#F4F6F1] hover:border-[#8CFF00] hover:text-[#8CFF00] transition-colors cursor-pointer"
@@ -940,7 +920,7 @@ function ResultadosReaisSection({ onOpenVideo }: ResultadosReaisSectionProps) {
           ))}
         </div>
 
-        <div className="mt-10 text-center">
+        <div className="mt-8 text-center">
           <button
             onClick={scrollToForm}
             className="inline-flex h-[52px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-[#8CFF00] px-8 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-md"
