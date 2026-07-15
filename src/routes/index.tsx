@@ -240,7 +240,7 @@ function Index() {
       <FaqCurtoSection />
 
       {/* FORMULÁRIO FINAL E FOOTER */}
-      <CtaFinalFormSection setLeadName={setLeadName} utms={utms} />
+      <CtaFinalFormSection />
       <Footer />
 
       {/* CTA FIXO NO MOBILE */}
@@ -1010,32 +1010,40 @@ function FaqCurtoSection() {
   );
 }
 
-// FORMULÁRIO FINAL E FOOTER
-interface CtaFinalFormSectionProps {
-  setLeadName: (val: string) => void;
-  utms: any;
-}
+function CtaFinalFormSection() {
+  const scrollToForm = () => {
+    trackCustomEvent("FinalSectionCTAClick");
+    const element = document.getElementById("hero-form-wrapper");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-function CtaFinalFormSection({ setLeadName, utms }: CtaFinalFormSectionProps) {
   return (
-    <section id="final-form-wrapper" className="bg-[#050705] py-14 lg:py-20 text-[#F4F6F1] scroll-mt-16">
-      <div className="mx-auto max-w-[460px] px-5 sm:px-6 text-center">
+    <section id="final-form-wrapper" className="bg-[#050705] py-14 lg:py-20 text-[#F4F6F1] scroll-mt-16 border-t border-[#252A25]">
+      <div className="mx-auto max-w-2xl px-5 sm:px-6 text-center">
         
-        <div className="mb-6">
-          <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
-            PRÓXIMO PASSO
-          </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
-            Antes de investir mais, descubra o que precisa ser corrigido.
-          </h2>
-          <p className="mt-2 text-xs sm:text-sm text-[#667066] font-medium leading-relaxed">
-            Preencha o formulário e receba uma análise estratégica do momento atual da sua clínica.
-          </p>
+        <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+          PRÓXIMO PASSO
+        </span>
+        <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
+          Antes de investir mais, descubra o que precisa ser corrigido.
+        </h2>
+        <p className="mt-3 text-sm sm:text-base text-[#667066] font-medium leading-relaxed max-w-xl mx-auto">
+          Solicite uma análise estratégica gratuita do momento atual da sua clínica.
+        </p>
+
+        <div className="mt-8">
+          <button
+            onClick={scrollToForm}
+            className="inline-flex h-[56px] w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-[#8CFF00] px-9 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-lg hover:scale-[1.02]"
+          >
+            PREENCHER FORMULÁRIO DE ANÁLISE
+            <ArrowRight className="h-5 w-5" />
+          </button>
         </div>
 
-        <MultistepFormCard setLeadName={setLeadName} utms={utms} formId="final_form" />
-
-        <p className="mt-4 text-[11px] font-semibold text-[#667066]">
+        <p className="mt-5 text-xs font-semibold text-[#667066]">
           Gratuito, sem compromisso e destinado a clínicas com faturamento a partir de R$ 35 mil mensais.
         </p>
 
