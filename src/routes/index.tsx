@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect, useRef, type FormEvent, type ReactNode } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -10,131 +10,31 @@ import {
   ChevronUp, 
   Loader2, 
   X, 
-  Lock, 
   Clock,
-  CheckCircle2
+  TrendingUp,
+  ShieldCheck,
+  Target,
+  Sparkles
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip
+} from "recharts";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-interface CaseStudy {
-  id: string;
-  name: string;
-  city: string;
-  specialty: string;
-  videoUrl: string;
-  thumbnail: string;
-  headline: ReactNode;
-  previousScenario: string;
-  strategy: string;
-  stats: {
-    investment: string;
-    revenue: string;
-    roas: string;
-  };
-  actions: string[];
-}
-
-const CASE_STUDIES: CaseStudy[] = [
-  {
-    id: "lannay",
-    name: "Dra. Lannay",
-    city: "FORTALEZA/CE",
-    specialty: "Odontologia Estética & Harmonização Facial",
-    videoUrl: "https://fazendoacontecer.site/wp-content/uploads/2026/06/lannay.webm",
-    thumbnail: "/thumb lannay.webp",
-    headline: (
-      <>
-        Multiplicou seus resultados de consultório, saindo de <span className="font-bold">R$ 30 mil</span> para mais de <span className="font-extrabold text-[#8CFF00]">R$ 500 mil/mês</span>.
-      </>
-    ),
-    previousScenario: "A operação passou a trabalhar posicionamento, geração de demanda e acompanhamento comercial na mesma direção.",
-    strategy: "Posicionamento e comunicação, campanhas de aquisição e acompanhamento ativo de leads e resultados.",
-    stats: {
-      investment: "R$ 12 mil",
-      revenue: "Mais de R$ 500 mil em faturamento mensal",
-      roas: "41x Mídia",
-    },
-    actions: [
-      "posicionamento e comunicação;",
-      "campanhas de aquisição;",
-      "acompanhamento dos leads e resultados."
-    ],
-  },
-  {
-    id: "marcela",
-    name: "Drª Marcela",
-    city: "SÃO PAULO/SP",
-    specialty: "Dermatologia Estética",
-    videoUrl: "https://fazendoacontecer.site/wp-content/uploads/2026/01/dep-dramarcela-1.webm",
-    thumbnail: "/thumb marcela.webp",
-    headline: (
-      <>
-        Fatura mais de <span className="font-extrabold text-[#8CFF00]">R$ 220 mil/mês</span> em seu consultório particular.
-      </>
-    ),
-    previousScenario: "Transição planejada da rotina de plantões para atendimento de estética facial premium.",
-    strategy: "Posicionamento de autoridade e qualificação comercial da recepção.",
-    stats: {
-      investment: "R$ 10 mil",
-      revenue: "R$ 220 mil+/mês",
-      roas: "22x Mídia",
-    },
-    actions: [
-      "Posicionamento de autoridade no digital",
-      "Qualificação comercial imediata dos contatos"
-    ],
-  },
-  {
-    id: "pedro",
-    name: "Dr. Pedro Lima",
-    city: "VILA VELHA/ES",
-    specialty: "Harmonização Facial & Corporal",
-    videoUrl: "https://fazendoacontecer.site/wp-content/uploads/2026/07/uri_ifs___V_MO7-PeBSuqG1Oeps5YgIKtnJW3-9mhF2JQC4TC9nHHU.webm",
-    thumbnail: "/thumb dr pedro.png",
-    headline: (
-      <>
-        Faturou <span className="font-extrabold text-[#8CFF00]">R$ 318 mil</span> em mês de baixa sazonalidade.
-      </>
-    ),
-    previousScenario: "Quebra de oscilações de faturamento em períodos considerados frios.",
-    strategy: "Campanhas ativas de atração e automação de acompanhamento no CRM.",
-    stats: {
-      investment: "R$ 21 mil",
-      revenue: "R$ 318 mil",
-      roas: "15x Mídia",
-    },
-    actions: [
-      "Atração ativa sem depender de indicação",
-      "Organização comercial no CRM"
-    ],
-  },
-  {
-    id: "cristiano",
-    name: "Dr. Cristiano",
-    city: "BRASÍLIA/DF",
-    specialty: "Cirurgia Plástica & Estética Avançada",
-    videoUrl: "https://fazendoacontecer.site/wp-content/uploads/2026/07/uri_ifs___V_015JtsY5elTU0ZxaDbcJI6sQBqUYryenRf0yFICm7Gw.webm",
-    thumbnail: "/thumb cris.png",
-    headline: (
-      <>
-        Faturou mais de <span className="font-extrabold text-[#8CFF00]">R$ 550 mil</span> nos primeiros 90 dias.
-      </>
-    ),
-    previousScenario: "Internalização da estrutura comercial para otimizar tempo médico.",
-    strategy: "Triagem automatizada de leads e rotinas comerciais dedicadas.",
-    stats: {
-      investment: "R$ 20 mil",
-      revenue: "R$ 550 mil+",
-      roas: "27x Mídia",
-    },
-    actions: [
-      "Triagem automatizada no comercial",
-      "Foco médico exclusivo em procedimentos"
-    ],
-  },
+// Dados reais do gráfico de faturamento da Dra. Lannay
+const LANNAY_GROWTH_DATA = [
+  { stage: "Fase Inicial", faturamento: 30, label: "R$ 30 mil/mês" },
+  { stage: "Implementação FA", faturamento: 150, label: "R$ 150 mil/mês" },
+  { stage: "Escala Full Face", faturamento: 320, label: "R$ 320 mil/mês" },
+  { stage: "Pico Atual", faturamento: 500, label: "+R$ 500 mil/mês" },
 ];
 
 // Tracking Helper
@@ -152,7 +52,7 @@ const trackCustomEvent = (eventName: string, params: Record<string, any> = {}) =
 
 function Index() {
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
-  const [leadName, setLeadName] = useState("");
+  const [, setLeadName] = useState("");
   const [utms, setUtms] = useState({
     utm_source: "",
     utm_medium: "",
@@ -168,7 +68,7 @@ function Index() {
       const win = window as any;
       if (typeof win.fbq === "function") {
         win.fbq("track", "PageView");
-        win.fbq("track", "ViewContent", { content_name: "Diagnostico Estrategico FA" });
+        win.fbq("track", "ViewContent", { content_name: "Diagnostico Estrategico FA Facial" });
       }
     }
 
@@ -231,32 +131,31 @@ function Index() {
   return (
     <div className="min-h-screen bg-[#050705] text-[#F4F6F1] font-sans selection:bg-[#8CFF00] selection:text-[#050705]">
       
-      {/* Barra de Qualificação Superior Vermelha Destacada */}
+      {/* Barra de Qualificação Superior */}
       <div className="bg-[#E10614] border-b border-red-800 py-3 px-4 flex items-center justify-center gap-2.5 text-xs sm:text-sm font-black text-[#FFFFFF] uppercase tracking-widest shrink-0 text-center shadow-md">
         <span className="h-2.5 w-2.5 rounded-full bg-[#FFFFFF] animate-pulse" />
-        <span>DIAGNÓSTICO GRATUITO PARA CLÍNICAS COM FATURAMENTO A PARTIR DE R$ 35 MIL/MÊS</span>
+        <span>DIAGNÓSTICO ESTRATÉGICO EXCLUSIVO PARA HARMONIZAÇÃO FACIAL E FULL FACE</span>
       </div>
 
       {/* 1. HERO COM FORMULÁRIO */}
       <Hero setLeadName={setLeadName} utms={utms} />
 
-      {/* 2. PASSO A PASSO */}
-      <PassoAPassoSection />
+      {/* 2. DEPOIMENTO DA DRA. LANNAY */}
+      <DepoimentoLannaySection onOpenVideo={handleOpenVideo} />
 
-      {/* 3. PROVA, NÃO APENAS PROMESSA */}
-      <CasePrincipalSection onOpenVideo={handleOpenVideo} />
+      {/* 3. GRÁFICO DE CRESCIMENTO DE FATURAMENTO */}
+      <GraficoCrescimentoSection />
 
-      {/* 4. ESTE DIAGNÓSTICO FAZ SENTIDO PARA SUA CLÍNICA SE: */}
-      <ParaQuemSection />
+      {/* 4. COMO FUNCIONA O DIAGNÓSTICO */}
+      <ComoFuncionaDiagnosticoSection />
 
-      {/* 5. RESULTADOS REAIS DE QUEM JÁ APLICOU A ESTRATÉGIA */}
-      <ResultadosReaisSection onOpenVideo={handleOpenVideo} />
+      {/* 5. PERGUNTAS FREQUENTES */}
+      <FaqSection />
 
-      {/* 6. PERGUNTAS FREQUENTES */}
-      <FaqCurtoSection />
+      {/* 6. CTA FINAL */}
+      <CtaFinalSection />
 
-      {/* FORMULÁRIO FINAL E FOOTER */}
-      <CtaFinalFormSection />
+      {/* FOOTER */}
       <Footer />
 
       {/* CTA FIXO NO MOBILE */}
@@ -271,35 +170,61 @@ function Index() {
   );
 }
 
-// ==================== COMPONENTES DAS 6 SEÇÕES ====================
-
-// SEÇÃO 1: HERO
+// ==================== 1. HERO SECTION ====================
 interface HeroProps {
   setLeadName: (val: string) => void;
   utms: any;
 }
 
 function Hero({ setLeadName, utms }: HeroProps) {
+  const bulletPoints = [
+    "Mais pacientes de harmonização facial chegando para consulta.",
+    "Estratégia pensada para Full Face e procedimentos de ticket mais alto.",
+    "Tráfego com foco em consulta, não em lead curioso.",
+    "Crescimento com mais previsibilidade e margem."
+  ];
+
   return (
-    <section id="topo" className="relative overflow-hidden bg-[#050705] pt-6 pb-12 lg:pt-10 lg:pb-16 min-h-[90vh] flex flex-col justify-center border-b border-[#252A25]">
+    <section id="topo" className="relative overflow-hidden bg-[#050705] pt-6 pb-12 lg:pt-10 lg:pb-16 min-h-[85vh] flex flex-col justify-center border-b border-[#252A25]">
       <div className="relative z-20 w-full mx-auto max-w-7xl px-5 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           
-          {/* Esquerda: Copy Principal (54%) */}
+          {/* Esquerda: Copy Principal (58%) */}
           <div className="lg:col-span-7 flex flex-col text-left">
             <div>
-              <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+                <Sparkles className="h-3.5 w-3.5 text-[#8CFF00]" />
                 DIAGNÓSTICO ESTRATÉGICO FA
               </span>
             </div>
 
-            <h1 className="mt-4 text-[38px] sm:text-[46px] lg:text-[56px] font-black leading-[1.08] tracking-tight text-[#FFFFFF]">
-              Antes de investir mais em tráfego, descubra onde sua clínica está <span className="text-[#8CFF00]">perdendo dinheiro.</span>
+            <h1 className="mt-4 text-[34px] sm:text-[44px] lg:text-[52px] font-black leading-[1.1] tracking-tight text-[#FFFFFF]">
+              Colocamos pacientes de <span className="text-[#8CFF00]">Full Face</span> no seu consultório para que o investimento em tráfego se pague nas consultas e o lucro venha no procedimento.
             </h1>
 
-            <p className="mt-4 text-[17px] sm:text-[19px] lg:text-[20px] leading-relaxed text-[#F4F6F1]/90 font-medium max-w-2xl">
-              Identificamos os gargalos que podem estar reduzindo seus agendamentos, sua conversão em procedimentos e o retorno do investimento em marketing.
+            <p className="mt-5 text-[16px] sm:text-[18px] lg:text-[19px] leading-relaxed text-[#F4F6F1]/90 font-medium max-w-2xl">
+              A FA estrutura posicionamento, criativos, tráfego e estratégia de conversão para ajudar especialistas em harmonização facial a atrair pacientes mais qualificados, gerar consultas e escalar procedimentos de maior margem.
             </p>
+
+            {/* Bullet points */}
+            <div className="mt-6 space-y-3 max-w-2xl">
+              {bulletPoints.map((bp, idx) => (
+                <div key={idx} className="flex items-start gap-3">
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#8CFF00] mt-0.5 shadow-sm">
+                    <Check className="h-3.5 w-3.5 text-[#050705] stroke-[3]" />
+                  </div>
+                  <span className="text-sm sm:text-base font-semibold text-[#F4F6F1]">{bp}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Prova Rápida Chamada */}
+            <div className="mt-8 pt-6 border-t border-[#252A25] flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-[#8CFF00] animate-ping" />
+              <p className="text-xs sm:text-sm font-semibold text-[#8CFF00] tracking-wide">
+                Veja abaixo o caso da Dra. Lannay, um dos maiores cases de Full Face da operação.
+              </p>
+            </div>
           </div>
 
           {/* Direita: Card Formulário Off-White */}
@@ -313,7 +238,7 @@ function Hero({ setLeadName, utms }: HeroProps) {
   );
 }
 
-// FORMULÁRIO 2 ETAPAS REUTILIZADO
+// FORMULÁRIO 2 ETAPAS INTEGRADO
 interface MultistepFormCardProps {
   setLeadName: (val: string) => void;
   utms: any;
@@ -327,7 +252,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [instagram, setInstagram] = useState("");
-  const [especialidade, setEspecialidade] = useState("");
+  const [especialidade, setEspecialidade] = useState("Harmonização facial / Full Face");
   
   const [faturamento, setFaturamento] = useState("");
   const [investimento, setInvestimento] = useState("");
@@ -469,17 +394,17 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
         const win = window as any;
         if (typeof win.fbq === "function") {
           win.fbq("track", "Lead", {
-            content_name: "Diagnostico Estrategico FA",
+            content_name: "Diagnostico Estrategico FA Facial",
             currency: "BRL",
             predicted_lead_type: `Lead ${leadType}`
           });
           win.fbq("trackCustom", "LeadForm", {
-            content_name: "Diagnostico Estrategico FA",
+            content_name: "Diagnostico Estrategico FA Facial",
             form_used: formId,
             predicted_lead_type: `Lead ${leadType}`
           });
           win.fbq("trackCustom", `Lead ${leadType}`, {
-            content_name: "Diagnostico Estrategico FA",
+            content_name: "Diagnostico Estrategico FA Facial",
             score: score
           });
         }
@@ -507,7 +432,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
     "w-full h-[52px] rounded-lg border border-[#DDE2D9] bg-[#FFFFFF] px-4 text-sm text-[#050705] placeholder:text-[#667066]/70 outline-none transition-all focus:border-[#8CFF00] focus:ring-2 focus:ring-[#8CFF00]/40 font-medium";
 
   return (
-    <div className="rounded-2xl border border-[#DDE2D9] bg-[#F4F6F1] p-6 sm:p-7 shadow-xl relative text-left text-[#050705]">
+    <div className="rounded-2xl border border-[#DDE2D9] bg-[#F4F6F1] p-6 sm:p-7 shadow-2xl relative text-left text-[#050705]">
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
           <span className="inline-flex items-center gap-1.5 rounded bg-[#050705] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#8CFF00]">
@@ -519,10 +444,10 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
           </span>
         </div>
         <h2 className="text-xl sm:text-2xl font-black text-[#050705] tracking-tight leading-tight">
-          Descubra onde sua clínica está perdendo oportunidades
+          Receba um diagnóstico da sua operação de Full Face
         </h2>
         <p className="mt-1.5 text-xs sm:text-sm text-[#667066] leading-relaxed">
-          Responda algumas perguntas rápidas para nossa equipe analisar o momento da sua operação.
+          Responda algumas perguntas rápidas para nossa equipe analisar o momento da sua clínica.
         </p>
       </div>
 
@@ -537,7 +462,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
 
       <form onSubmit={onSubmit} className="space-y-3.5">
         {step === 1 && (
-          <div className="space-y-3.5 animate-fade-in">
+          <div className="space-y-3.5">
             <div>
               <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[#050705] mb-1">
                 Nome Completo *
@@ -572,13 +497,13 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
               className="mt-2 w-full inline-flex h-[54px] items-center justify-center gap-2 rounded-lg bg-[#8CFF00] px-6 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] transition-all hover:bg-[#68BF00] cursor-pointer shadow-md"
             >
               CONTINUAR PARA MINHA ANÁLISE
-              <ArrowRight className="h-4.5 w-4.5" />
+              <ArrowRight className="h-4.5 w-4.5 text-[#050705]" />
             </button>
           </div>
         )}
 
         {step === 2 && (
-          <div className="space-y-3 animate-fade-in">
+          <div className="space-y-3">
             <div>
               <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[#050705] mb-1">
                 Instagram da Clínica *
@@ -597,18 +522,12 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
                 Principal Especialidade *
               </label>
               <select required value={especialidade} onChange={e => setEspecialidade(e.target.value)} className={inputCls}>
-                <option value="" disabled>Selecione uma especialidade</option>
-                <option>Harmonização facial</option>
-                <option>Full Face / Face to Face</option>
-                <option>Harmonização corporal</option>
-                <option>Remodelação corporal</option>
-                <option>Procedimentos glúteos</option>
-                <option>Odontologia estética</option>
-                <option>Dermatologia estética</option>
-                <option>Cirurgia plástica</option>
-                <option>Emagrecimento</option>
-                <option>Estética avançada</option>
-                <option>Outra especialidade</option>
+                <option value="Harmonização facial / Full Face">Harmonização facial / Full Face</option>
+                <option value="Face to Face">Face to Face</option>
+                <option value="Odontologia Estética / HOF">Odontologia Estética / HOF</option>
+                <option value="Dermatologia Estética">Dermatologia Estética</option>
+                <option value="Cirurgia Plástica Facial">Cirurgia Plástica Facial</option>
+                <option value="Outra especialidade de alto ticket">Outra especialidade de alto ticket</option>
               </select>
             </div>
             <div>
@@ -643,15 +562,11 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
               </label>
               <select required value={gargalo} onChange={e => setGargalo(e.target.value)} className={inputCls}>
                 <option value="" disabled>Qual o maior desafio hoje?</option>
-                <option>Posicionamento e conteúdo</option>
-                <option>Geração de leads</option>
-                <option>Qualidade dos leads</option>
-                <option>Agendamento de consultas</option>
-                <option>Atendimento dos contatos</option>
-                <option>Follow-up</option>
-                <option>Conversão em procedimentos</option>
-                <option>Falta de dados</option>
-                <option>Dependência de indicações</option>
+                <option>Qualidade dos leads (muito lead curioso)</option>
+                <option>Agendamento de consultas de Full Face</option>
+                <option>Conversão em procedimentos de ticket alto</option>
+                <option>Posicionamento e atrair o paciente certo</option>
+                <option>Previsibilidade de faturamento mensal</option>
                 <option>Não sei identificar</option>
               </select>
             </div>
@@ -674,7 +589,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
                 onClick={() => setStep(1)}
                 className="inline-flex h-[54px] w-14 shrink-0 items-center justify-center rounded-lg border border-[#DDE2D9] bg-[#FFFFFF] text-[#050705] hover:bg-[#DDE2D9] transition-all cursor-pointer"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-5 w-5 text-[#050705]" />
               </button>
               <button
                 type="submit"
@@ -683,12 +598,12 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin text-[#050705]" />
                     Processando...
                   </>
                 ) : (
                   <>
-                    QUERO IDENTIFICAR MEUS GARGALOS
+                    QUERO RECEBER MEU DIAGNÓSTICO
                   </>
                 )}
               </button>
@@ -698,10 +613,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
 
         <div className="mt-4 pt-3 border-t border-[#DDE2D9] text-center space-y-1">
           <p className="text-xs font-bold text-[#050705]">
-            Gratuito e sem compromisso. Você não precisa contratar nenhum serviço depois da análise.
-          </p>
-          <p className="text-[11px] font-medium text-[#667066]">
-            Seus dados serão utilizados apenas para o contato da equipe da FA.
+            Gratuito, sem compromisso e destinado a clínicas com operação validada.
           </p>
         </div>
 
@@ -710,66 +622,17 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
   );
 }
 
-// SEÇÃO 2: PASSO A PASSO
-function PassoAPassoSection() {
-  const etapas = [
-    {
-      num: "01",
-      title: "1. Você preenche",
-      desc: "Compartilha rapidamente informações sobre o momento da clínica."
-    },
-    {
-      num: "02",
-      title: "2. A FA analisa",
-      desc: "Nossa equipe avalia os dados e identifica os principais pontos de atenção."
-    },
-    {
-      num: "03",
-      title: "3. Você recebe a análise",
-      desc: "Em uma conversa estratégica, mostramos os gargalos e o próximo passo recomendado."
-    }
-  ];
-
-  return (
-    <section className="bg-[#F4F6F1] border-b border-[#DDE2D9] py-14 lg:py-18 text-[#050705]">
-      <div className="mx-auto max-w-5xl px-5 sm:px-6 text-center">
-        
-        <span className="inline-flex items-center rounded-md bg-[#FFFFFF] border border-[#DDE2D9] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#050705]">
-          PASSO A PASSO
-        </span>
-        <h2 className="mt-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#050705]">
-          Como funciona a solicitação do diagnóstico
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 text-left">
-          {etapas.map((et, idx) => (
-            <div key={idx} className="rounded-xl border border-[#DDE2D9] bg-[#FFFFFF] p-6 shadow-sm">
-              <span className="block text-2xl font-black text-[#5FAE00] mb-2">{et.num}</span>
-              <h3 className="text-base font-extrabold text-[#050705]">{et.title}</h3>
-              <p className="mt-1.5 text-xs sm:text-sm text-[#667066] leading-relaxed font-medium">{et.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-6 text-xs text-[#667066] font-bold">
-          * Sem obrigação de contratação.
-        </p>
-
-      </div>
-    </section>
-  );
-}
-
-// SEÇÃO 3: PROVA, NÃO APENAS PROMESSA
-interface CasePrincipalSectionProps {
+// ==================== 2. DEPOIMENTO DA DRA. LANNAY ====================
+interface DepoimentoLannaySectionProps {
   onOpenVideo: (url: string) => void;
 }
 
-function CasePrincipalSection({ onOpenVideo }: CasePrincipalSectionProps) {
-  const caseDestaque = CASE_STUDIES[0];
-  
+function DepoimentoLannaySection({ onOpenVideo }: DepoimentoLannaySectionProps) {
+  const videoUrl = "https://fazendoacontecer.site/wp-content/uploads/2026/06/lannay.webm";
+  const thumbnail = "/thumb lannay.webp";
+
   const scrollToForm = () => {
-    trackCustomEvent("MainCaseCTAClick");
+    trackCustomEvent("LannayCaseCTAClick");
     const element = document.getElementById("hero-form-wrapper");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -777,57 +640,81 @@ function CasePrincipalSection({ onOpenVideo }: CasePrincipalSectionProps) {
   };
 
   return (
-    <section className="bg-[#050705] border-b border-[#252A25] py-12 lg:py-16 text-[#F4F6F1]">
+    <section className="bg-[#050705] border-b border-[#252A25] py-14 lg:py-18 text-[#F4F6F1]">
       <div className="mx-auto max-w-5xl px-5 sm:px-6">
         
-        <div className="text-center mb-8 max-w-3xl mx-auto">
-          <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
-            PROVA, NÃO APENAS PROMESSA
+        <div className="text-center mb-10 max-w-3xl mx-auto">
+          <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+            CASE REAL DE FULL FACE
           </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
-            Veja o que acontece quando marketing e vendas trabalham juntos.
+          <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
+            Veja como a Dra. Lannay transformou sua operação com uma estratégia voltada para harmonização facial.
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-6 sm:p-8 flex flex-col md:flex-row items-center gap-8 shadow-xl text-left max-w-4xl mx-auto">
+        <div className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-6 sm:p-9 flex flex-col md:flex-row items-center gap-8 lg:gap-10 shadow-2xl text-left max-w-4xl mx-auto">
           
-          <div className="w-full md:w-[220px] shrink-0">
+          {/* Thumbnail do Vídeo com Play Button */}
+          <div className="w-full md:w-[240px] shrink-0">
             <div 
-              onClick={() => onOpenVideo(caseDestaque.videoUrl)}
-              className="group relative aspect-[9/16] w-full max-w-[190px] mx-auto rounded-xl border border-[#252A25] bg-[#050705] overflow-hidden cursor-pointer shadow-lg hover:border-[#8CFF00]/60 transition-all"
+              onClick={() => onOpenVideo(videoUrl)}
+              className="group relative aspect-[9/16] w-full max-w-[210px] mx-auto rounded-xl border border-[#252A25] bg-[#050705] overflow-hidden cursor-pointer shadow-xl hover:border-[#8CFF00]/60 transition-all"
             >
               <img 
-                src={caseDestaque.thumbnail} 
-                alt={`Case ${caseDestaque.name}`} 
+                src={thumbnail} 
+                alt="Depoimento Dra. Lannay" 
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] shadow-lg group-hover:scale-110 transition-transform">
-                  <Play className="h-5 w-5 fill-[#050705] translate-x-0.5" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] shadow-xl group-hover:scale-110 transition-transform">
+                  <Play className="h-6 w-6 fill-[#050705] translate-x-0.5 text-[#050705]" />
                 </div>
               </div>
             </div>
+            <p className="mt-2 text-center text-[11px] font-bold text-[#8CFF00] uppercase tracking-wider">
+              Clique para assistir ao depoimento
+            </p>
           </div>
 
+          {/* Dados e Apoio */}
           <div className="flex-1 flex flex-col justify-center">
-            <h3 className="text-xl sm:text-2xl font-black text-[#FFFFFF]">
-              {caseDestaque.name} <span className="text-sm font-semibold text-[#667066] ml-1">— {caseDestaque.city}</span>
-            </h3>
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#667066] block">
+                FORTALEZA / CE — ODONTOLOGIA ESTÉTICA & HOF
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black text-[#FFFFFF] mt-1">
+                Dra. Lannay
+              </h3>
+            </div>
 
-            <div className="mt-3">
+            <div className="mt-4 p-4 rounded-xl border border-[#8CFF00]/30 bg-[#8CFF00]/5">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-[#8CFF00] block mb-1">
+                Resultado principal em destaque
+              </span>
               <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#8CFF00] block tracking-tight">
-                {caseDestaque.stats.revenue}
+                Mais de R$ 500 mil em faturamento mensal
               </span>
             </div>
 
-            <div className="mt-6">
+            <p className="mt-4 text-sm sm:text-base text-[#F4F6F1]/90 leading-relaxed font-medium">
+              Com uma estratégia alinhando posicionamento, aquisição de pacientes e estrutura de conversão, a operação ganhou escala em procedimentos de harmonização facial.
+            </p>
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => onOpenVideo(videoUrl)}
+                className="inline-flex h-[48px] items-center justify-center gap-2 rounded-lg border border-[#252A25] bg-[#050705] px-5 text-xs font-black uppercase tracking-wider text-[#F4F6F1] hover:border-[#8CFF00] hover:text-[#8CFF00] transition-all cursor-pointer"
+              >
+                <Play className="h-4 w-4 fill-current" />
+                Assistir Vídeo do Case
+              </button>
               <button
                 onClick={scrollToForm}
-                className="inline-flex h-[52px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-[#8CFF00] px-7 text-xs font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-md"
+                className="inline-flex h-[48px] items-center justify-center gap-2 rounded-lg bg-[#8CFF00] px-6 text-xs font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-md"
               >
-                QUERO IDENTIFICAR O POTENCIAL DA MINHA CLÍNICA
-                <ArrowRight className="h-4 w-4" />
+                SOLICITAR MEU DIAGNÓSTICO
+                <ArrowRight className="h-4 w-4 text-[#050705]" />
               </button>
             </div>
 
@@ -840,39 +727,97 @@ function CasePrincipalSection({ onOpenVideo }: CasePrincipalSectionProps) {
   );
 }
 
-// SEÇÃO 4: ESTE DIAGNÓSTICO FAZ SENTIDO PARA SUA CLÍNICA SE:
-function ParaQuemSection() {
-  const items = [
-    "fatura a partir de R$ 35 mil por mês;",
-    "possui procedimentos ou serviços validados;",
-    "quer aumentar agendamentos ou conversão;",
-    "possui capacidade para atender novos pacientes;",
-    "deseja crescer sem depender apenas de indicação."
-  ];
-
+// ==================== 3. GRÁFICO DE CRESCIMENTO DE FATURAMENTO ====================
+function GraficoCrescimentoSection() {
   return (
-    <section className="bg-[#F4F6F1] border-b border-[#DDE2D9] py-14 lg:py-16 text-[#050705]">
-      <div className="mx-auto max-w-3xl px-5 sm:px-6 text-left">
+    <section className="bg-[#050705] border-b border-[#252A25] py-14 lg:py-18 text-[#F4F6F1]">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6">
         
-        <div className="rounded-2xl border border-[#DDE2D9] bg-[#FFFFFF] p-7 sm:p-9 shadow-sm">
-          <h2 className="text-xl sm:text-2xl font-black text-[#050705] tracking-tight">
-            Este diagnóstico faz sentido para sua clínica se:
+        <div className="text-center mb-8 max-w-3xl mx-auto">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+            <TrendingUp className="h-3.5 w-3.5 text-[#8CFF00]" />
+            ESCALA RECOMPENSADORA
+          </span>
+          <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
+            Crescimento de faturamento da operação da Dra. Lannay
           </h2>
+          <p className="mt-3 text-sm sm:text-base text-[#F4F6F1]/80 font-medium leading-relaxed max-w-2xl mx-auto">
+            Um exemplo de como uma estrutura voltada para harmonização facial pode escalar quando marketing, posicionamento e conversão trabalham juntos.
+          </p>
+        </div>
 
-          <div className="mt-6 space-y-3">
-            {items.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-3">
-                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#8CFF00] mt-0.5">
-                  <Check className="h-3.5 w-3.5 text-[#050705]" />
-                </div>
-                <span className="text-sm sm:text-base text-[#050705] font-semibold">{item}</span>
-              </div>
-            ))}
+        {/* Card do Gráfico com Design Premium Dark */}
+        <div className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-6 sm:p-8 shadow-2xl max-w-4xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#252A25]">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-widest text-[#667066]">Evolução de Faturamento Mensal</span>
+              <h3 className="text-xl font-black text-[#FFFFFF]">Dra. Lannay (Harmonização Facial)</h3>
+            </div>
+            <div className="flex items-center gap-2 bg-[#050705] border border-[#252A25] px-3 py-1.5 rounded-lg text-xs font-bold text-[#8CFF00]">
+              <span className="h-2 w-2 rounded-full bg-[#8CFF00]" />
+              R$ 30k ➔ +R$ 500k/mês
+            </div>
           </div>
 
-          <div className="mt-6 pt-5 border-t border-[#DDE2D9]">
-            <p className="text-xs text-[#667066] font-medium">
-              * Não é indicado para operações que ainda não possuem um serviço validado ou capacidade mínima de investimento.
+          {/* Gráfico Recharts */}
+          <div className="w-full h-[280px] sm:h-[320px] pt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={LANNAY_GROWTH_DATA} margin={{ top: 20, right: 30, left: 10, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="neonGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8CFF00" stopOpacity={0.45} />
+                    <stop offset="95%" stopColor="#8CFF00" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <XAxis 
+                  dataKey="stage" 
+                  stroke="#667066" 
+                  tickLine={false} 
+                  axisLine={{ stroke: "#252A25" }}
+                  tick={{ fill: "#F4F6F1", fontSize: 12, fontWeight: 700 }}
+                />
+                <YAxis 
+                  stroke="#667066" 
+                  tickLine={false} 
+                  axisLine={{ stroke: "#252A25" }}
+                  tick={{ fill: "#667066", fontSize: 11 }}
+                  unit="k"
+                />
+                <Tooltip 
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-[#050705] border border-[#8CFF00] p-3 rounded-lg shadow-xl text-left">
+                          <p className="text-xs font-bold text-[#667066] uppercase tracking-wider">{data.stage}</p>
+                          <p className="text-lg font-black text-[#8CFF00] mt-0.5">{data.label}</p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="faturamento" 
+                  stroke="#8CFF00" 
+                  strokeWidth={3} 
+                  fillOpacity={1} 
+                  fill="url(#neonGradient)" 
+                  dot={{ fill: "#050705", stroke: "#8CFF00", strokeWidth: 3, r: 6 }}
+                  activeDot={{ r: 8, fill: "#8CFF00", stroke: "#FFFFFF", strokeWidth: 2 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Texto de apoio abaixo do gráfico */}
+          <div className="mt-8 pt-6 border-t border-[#252A25] text-center max-w-2xl mx-auto space-y-2">
+            <p className="text-sm sm:text-base font-extrabold text-[#F4F6F1] leading-relaxed">
+              O objetivo não é apenas gerar leads. É criar uma operação capaz de transformar demanda em consultas e consultas em procedimentos de maior margem.
+            </p>
+            <p className="text-[11px] font-medium text-[#667066]">
+              * Os resultados variam conforme mercado, oferta, equipe, investimento e execução.
             </p>
           </div>
 
@@ -883,82 +828,54 @@ function ParaQuemSection() {
   );
 }
 
-// SEÇÃO 5: RESULTADOS REAIS DE QUEM JÁ APLICOU A ESTRATÉGIA
-interface ResultadosReaisSectionProps {
-  onOpenVideo: (url: string) => void;
-}
-
-function ResultadosReaisSection({ onOpenVideo }: ResultadosReaisSectionProps) {
-  const scrollToForm = () => {
-    trackCustomEvent("AdditionalProofCTAClick");
-    const element = document.getElementById("hero-form-wrapper");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+// ==================== 4. COMO FUNCIONA O DIAGNÓSTICO ====================
+function ComoFuncionaDiagnosticoSection() {
+  const passos = [
+    {
+      num: "01",
+      title: "Você preenche o formulário",
+      desc: "Compartilha rapidamente algumas informações sobre sua clínica e o momento atual da operação."
+    },
+    {
+      num: "02",
+      title: "Nossa equipe faz a análise",
+      desc: "Avaliamos posicionamento, captação, potencial de consulta e principais gargalos."
+    },
+    {
+      num: "03",
+      title: "Você recebe um direcionamento claro",
+      desc: "Mostramos o que está travando seu crescimento e qual o próximo passo faz mais sentido."
     }
-  };
-
-  const provas = CASE_STUDIES.slice(1, 4);
+  ];
 
   return (
-    <section className="bg-[#050705] border-b border-[#252A25] py-12 lg:py-16 text-[#F4F6F1]">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6">
+    <section className="bg-[#F4F6F1] border-b border-[#DDE2D9] py-14 lg:py-18 text-[#050705]">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6 text-center">
         
-        <div className="text-center mb-8 max-w-3xl mx-auto">
-          <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
-            OUTRAS OPERAÇÕES
-          </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
-            Resultados reais de quem já aplicou a estratégia
-          </h2>
-        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-[#FFFFFF] border border-[#DDE2D9] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#050705]">
+          <Target className="h-3.5 w-3.5 text-[#050705]" />
+          PASSO A PASSO
+        </span>
+        <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#050705]">
+          Como funciona o diagnóstico da sua operação
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
-          {provas.map((c) => (
-            <div key={c.id} className="rounded-2xl border border-[#252A25] bg-[#0B0E0B] p-5 flex flex-col justify-between shadow-md hover:border-[#8CFF00]/40 transition-colors">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 text-left">
+          {passos.map((p, idx) => (
+            <div key={idx} className="rounded-2xl border border-[#DDE2D9] bg-[#FFFFFF] p-7 shadow-sm flex flex-col justify-between hover:border-[#8CFF00] transition-colors">
               <div>
-                <div 
-                  onClick={() => onOpenVideo(c.videoUrl)}
-                  className="group relative aspect-[9/16] w-full max-w-[170px] mx-auto rounded-xl border border-[#252A25] bg-[#050705] overflow-hidden cursor-pointer mb-4"
-                >
-                  <img 
-                    src={c.thumbnail} 
-                    alt={c.name} 
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#8CFF00] text-[#050705] group-hover:scale-110 transition-transform">
-                      <Play className="h-4 w-4 fill-[#050705] translate-x-0.5" />
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-sm font-extrabold text-[#FFFFFF]">{c.name} <span className="text-xs font-normal text-[#667066] ml-0.5">— {c.city}</span></h3>
-                <span className="block mt-1 text-lg font-black text-[#8CFF00]">{c.stats.revenue}</span>
+                <span className="block text-3xl font-black text-[#5FAE00] mb-3">{p.num}</span>
+                <h3 className="text-lg font-extrabold text-[#050705]">{p.title}</h3>
+                <p className="mt-2 text-xs sm:text-sm text-[#667066] leading-relaxed font-medium">{p.desc}</p>
               </div>
-
-              <div className="mt-4 pt-3 border-t border-[#252A25]/60">
-                <button
-                  onClick={() => onOpenVideo(c.videoUrl)}
-                  className="w-full h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#252A25] bg-[#050705] text-xs font-bold text-[#F4F6F1] hover:border-[#8CFF00] hover:text-[#8CFF00] transition-colors cursor-pointer"
-                >
-                  <Play className="h-3.5 w-3.5" />
-                  Assistir depoimento
-                </button>
-              </div>
-
             </div>
           ))}
         </div>
 
-        <div className="mt-8 text-center">
-          <button
-            onClick={scrollToForm}
-            className="inline-flex h-[52px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-[#8CFF00] px-8 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-md"
-          >
-            QUERO UMA ANÁLISE DA MINHA OPERAÇÃO
-            <ArrowRight className="h-4.5 w-4.5" />
-          </button>
+        <div className="mt-8">
+          <p className="text-xs text-[#667066] font-bold">
+            * Sem compromisso de contratação.
+          </p>
         </div>
 
       </div>
@@ -966,8 +883,8 @@ function ResultadosReaisSection({ onOpenVideo }: ResultadosReaisSectionProps) {
   );
 }
 
-// SEÇÃO 6: PERGUNTAS FREQUENTES
-function FaqCurtoSection() {
+// ==================== 5. PERGUNTAS FREQUENTES (FAQ) ====================
+function FaqSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const toggleIndex = (idx: number) => {
@@ -976,24 +893,28 @@ function FaqCurtoSection() {
 
   const faqs = [
     {
-      q: "O diagnóstico é realmente gratuito?",
-      a: "Sim. A análise inicial não possui custo nem obrigação de contratação."
+      q: "Esse diagnóstico é realmente gratuito?",
+      a: "Sim. A análise inicial é gratuita e sem compromisso."
     },
     {
-      q: "Preciso contratar a FA depois?",
-      a: "Não. O diagnóstico ajuda a entender os gargalos e o próximo passo recomendado, mas a decisão de contratar é sua."
+      q: "A FA atende clínicas e profissionais de harmonização facial?",
+      a: "Sim. Esta página foi criada especificamente para especialistas e clínicas que atuam com harmonização facial, Full Face e procedimentos faciais de maior valor."
     },
     {
-      q: "A FA atende clínicas que faturam R$ 35 mil?",
-      a: "Sim. Existem diferentes modelos de entrega de acordo com o estágio da operação."
+      q: "O foco é gerar pacientes para consulta ou apenas leads?",
+      a: "O objetivo é estruturar uma operação para atrair pacientes com potencial de consulta e fechamento, e não apenas aumentar volume de leads sem qualidade."
     },
     {
       q: "Preciso já investir em tráfego?",
-      a: "Não obrigatoriamente. A análise considera o momento atual e a capacidade de investimento da clínica."
+      a: "Não necessariamente. O diagnóstico serve justamente para entender o momento atual da operação e identificar o melhor próximo passo."
     },
     {
-      q: "O que acontece depois do preenchimento?",
-      a: "Nossa equipe analisa as informações e entra em contato para aprofundar o diagnóstico."
+      q: "A FA garante resultado?",
+      a: "Não existe garantia de resultado. O desempenho depende de fatores como mercado, oferta, investimento, equipe e execução. O papel da FA é estruturar a estratégia para aumentar as chances de crescimento com consistência."
+    },
+    {
+      q: "O que acontece depois que eu preencher?",
+      a: "Nossa equipe analisa suas respostas e entra em contato para aprofundar o diagnóstico da operação."
     }
   ];
 
@@ -1001,33 +922,34 @@ function FaqCurtoSection() {
     <section className="bg-[#050705] border-b border-[#252A25] py-14 lg:py-18 text-[#F4F6F1]">
       <div className="mx-auto max-w-3xl px-5 sm:px-6">
         
-        <div className="text-center mb-8 max-w-3xl mx-auto">
-          <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+            <ShieldCheck className="h-3.5 w-3.5 text-[#8CFF00]" />
             TIRA-DÚVIDAS
           </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
+          <h2 className="mt-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#FFFFFF]">
             Perguntas frequentes
           </h2>
         </div>
 
-        <div className="space-y-2.5 text-left">
+        <div className="space-y-3 text-left">
           {faqs.map((f, idx) => {
             const isOpen = activeIndex === idx;
             return (
-              <div key={idx} className="rounded-xl border border-[#252A25] bg-[#0B0E0B] overflow-hidden">
+              <div key={idx} className="rounded-xl border border-[#252A25] bg-[#0B0E0B] overflow-hidden transition-colors hover:border-[#252A25]/80">
                 <button
                   onClick={() => toggleIndex(idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-bold text-sm text-[#F4F6F1] hover:bg-[#050705] transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left font-bold text-sm sm:text-base text-[#F4F6F1] hover:bg-[#050705] transition-colors cursor-pointer"
                 >
-                  <span>{f.q}</span>
+                  <span className="pr-4">{f.q}</span>
                   {isOpen ? (
-                    <ChevronUp className="h-4 w-4 text-[#8CFF00] shrink-0 ml-3" />
+                    <ChevronUp className="h-5 w-5 text-[#8CFF00] shrink-0" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-[#8CFF00] shrink-0 ml-3" />
+                    <ChevronDown className="h-5 w-5 text-[#8CFF00] shrink-0" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 border-t border-[#252A25] bg-[#050705] text-xs sm:text-sm text-[#F4F6F1]/80 leading-relaxed font-medium animate-fade-in">
+                  <div className="p-4 sm:p-5 border-t border-[#252A25] bg-[#050705] text-xs sm:text-sm text-[#F4F6F1]/85 leading-relaxed font-medium animate-fade-in">
                     {f.a}
                   </div>
                 )}
@@ -1041,7 +963,8 @@ function FaqCurtoSection() {
   );
 }
 
-function CtaFinalFormSection() {
+// ==================== 6. CTA FINAL ====================
+function CtaFinalSection() {
   const scrollToForm = () => {
     trackCustomEvent("FinalSectionCTAClick");
     const element = document.getElementById("hero-form-wrapper");
@@ -1052,30 +975,30 @@ function CtaFinalFormSection() {
 
   return (
     <section id="final-form-wrapper" className="bg-[#050705] py-14 lg:py-20 text-[#F4F6F1] scroll-mt-16 border-t border-[#252A25]">
-      <div className="mx-auto max-w-2xl px-5 sm:px-6 text-center">
+      <div className="mx-auto max-w-3xl px-5 sm:px-6 text-center">
         
-        <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
+        <span className="inline-flex items-center rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
           PRÓXIMO PASSO
         </span>
-        <h2 className="mt-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF]">
-          Antes de investir mais, descubra o que precisa ser corrigido.
+        <h2 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#FFFFFF] max-w-2xl mx-auto">
+          Se você quer mais pacientes de harmonização facial no consultório, o primeiro passo é descobrir o que está travando sua operação.
         </h2>
-        <p className="mt-3 text-sm sm:text-base text-[#667066] font-medium leading-relaxed max-w-xl mx-auto">
-          Solicite uma análise estratégica gratuita do momento atual da sua clínica.
+        <p className="mt-4 text-sm sm:text-base text-[#F4F6F1]/80 font-medium leading-relaxed max-w-xl mx-auto">
+          Solicite um diagnóstico gratuito e entenda como sua clínica pode crescer com mais consultas e mais potencial de faturamento em Full Face.
         </p>
 
         <div className="mt-8">
           <button
             onClick={scrollToForm}
-            className="inline-flex h-[56px] w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-[#8CFF00] px-9 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-lg hover:scale-[1.02]"
+            className="inline-flex h-[56px] w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-[#8CFF00] px-9 text-xs sm:text-sm font-black uppercase tracking-wider text-[#050705] hover:bg-[#68BF00] transition-all cursor-pointer shadow-xl hover:scale-[1.02]"
           >
-            PREENCHER FORMULÁRIO DE ANÁLISE
-            <ArrowRight className="h-5 w-5" />
+            QUERO RECEBER MEU DIAGNÓSTICO
+            <ArrowRight className="h-5 w-5 text-[#050705]" />
           </button>
         </div>
 
         <p className="mt-5 text-xs font-semibold text-[#667066]">
-          Gratuito, sem compromisso e destinado a clínicas com faturamento a partir de R$ 35 mil mensais.
+          Gratuito, sem compromisso e destinado a clínicas com operação validada.
         </p>
 
       </div>
@@ -1083,6 +1006,7 @@ function CtaFinalFormSection() {
   );
 }
 
+// ==================== FOOTER & COMPONENTES AUXILIARES ====================
 function Footer() {
   return (
     <footer className="border-t border-[#252A25] bg-[#050705] text-[#667066]">
@@ -1091,7 +1015,7 @@ function Footer() {
         <div className="flex items-center gap-2">
           <span className="text-xl font-black text-[#F4F6F1]">FA</span>
           <span className="h-1.5 w-1.5 rounded-full bg-[#8CFF00]" />
-          <span className="font-bold text-[#F4F6F1]">Fazendo Acontecer</span>
+          <span className="font-bold text-[#F4F6F1]">Fazendo Acontecer — Harmonização Facial</span>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-6">
@@ -1163,10 +1087,10 @@ function CtaFixoMobile() {
     <div className={`fixed bottom-0 left-0 w-full z-40 p-2.5 bg-[#050705]/95 border-t border-[#252A25] md:hidden backdrop-blur-md transition-all duration-300 transform ${isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"}`}>
       <button
         onClick={scrollToForm}
-        className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-[#8CFF00] text-xs font-black uppercase tracking-wider text-[#050705] shadow-lg cursor-pointer"
+        className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-[#8CFF00] text-xs font-black uppercase tracking-wider text-[#050705] shadow-lg cursor-pointer font-bold"
       >
-        RECEBER DIAGNÓSTICO GRATUITO
-        <ArrowRight className="h-4 w-4" />
+        QUERO RECEBER MEU DIAGNÓSTICO
+        <ArrowRight className="h-4 w-4 text-[#050705]" />
       </button>
     </div>
   );
