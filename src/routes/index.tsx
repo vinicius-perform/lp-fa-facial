@@ -178,10 +178,9 @@ interface HeroProps {
 
 function Hero({ setLeadName, utms }: HeroProps) {
   const bulletPoints = [
-    "Mais pacientes de harmonização facial chegando para consulta.",
-    "Estratégia pensada para Full Face e procedimentos de ticket mais alto.",
-    "Tráfego com foco em consulta, não em lead curioso.",
-    "Crescimento com mais previsibilidade e margem."
+    "Mais consultas de Full Face. Menos leads curiosos.",
+    "Estratégia focada em procedimentos de alta margem.",
+    "Tráfego orientado a agendamento e fechamento."
   ];
 
   return (
@@ -194,16 +193,16 @@ function Hero({ setLeadName, utms }: HeroProps) {
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-md bg-[#0B0E0B] border border-[#252A25] px-3.5 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-[#8CFF00]">
                 <Sparkles className="h-3.5 w-3.5 text-[#8CFF00]" />
-                DIAGNÓSTICO ESTRATÉGICO FA
+                DIAGNÓSTICO PARA ESPECIALISTAS EM FULL FACE
               </span>
             </div>
 
             <h1 className="mt-4 text-[34px] sm:text-[44px] lg:text-[52px] font-black leading-[1.1] tracking-tight text-[#FFFFFF]">
-              Colocamos pacientes de <span className="text-[#8CFF00]">Full Face</span> no seu consultório para que o investimento em tráfego se pague nas consultas e o lucro venha no procedimento.
+              Transforme seu tráfego em <span className="text-[#8CFF00]">consultas de Full Face</span> — e as consultas em lucro no procedimento.
             </h1>
 
             <p className="mt-5 text-[16px] sm:text-[18px] lg:text-[19px] leading-relaxed text-[#F4F6F1]/90 font-medium max-w-2xl">
-              A FA estrutura posicionamento, criativos, tráfego e estratégia de conversão para ajudar especialistas em harmonização facial a atrair pacientes mais qualificados, gerar consultas e escalar procedimentos de maior margem.
+              A FA estrutura posicionamento, criativos e campanhas para atrair pacientes mais qualificados, aumentar os agendamentos e escalar procedimentos de ticket alto.
             </p>
 
             {/* Bullet points */}
@@ -222,7 +221,7 @@ function Hero({ setLeadName, utms }: HeroProps) {
             <div className="mt-8 pt-6 border-t border-[#252A25] flex items-center gap-3">
               <div className="h-2 w-2 rounded-full bg-[#8CFF00] animate-ping" />
               <p className="text-xs sm:text-sm font-semibold text-[#8CFF00] tracking-wide">
-                Veja abaixo o caso da Dra. Lannay, um dos maiores cases de Full Face da operação.
+                Veja como a Dra. Lannay ultrapassou R$ 500 mil mensais com uma operação focada em Full Face.
               </p>
             </div>
           </div>
@@ -444,10 +443,10 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
           </span>
         </div>
         <h2 className="text-xl sm:text-2xl font-black text-[#050705] tracking-tight leading-tight">
-          Receba um diagnóstico da sua operação de Full Face
+          Descubra o que está travando suas vendas de Full Face
         </h2>
         <p className="mt-1.5 text-xs sm:text-sm text-[#667066] leading-relaxed">
-          Responda algumas perguntas rápidas para nossa equipe analisar o momento da sua clínica.
+          Responda em menos de um minuto e receba uma análise da sua operação.
         </p>
       </div>
 
@@ -603,7 +602,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
                   </>
                 ) : (
                   <>
-                    QUERO RECEBER MEU DIAGNÓSTICO
+                    QUERO MAIS CONSULTAS DE FULL FACE
                   </>
                 )}
               </button>
@@ -613,7 +612,7 @@ function MultistepFormCard({ setLeadName, utms, formId }: MultistepFormCardProps
 
         <div className="mt-4 pt-3 border-t border-[#DDE2D9] text-center space-y-1">
           <p className="text-xs font-bold text-[#050705]">
-            Gratuito, sem compromisso e destinado a clínicas com operação validada.
+            Diagnóstico gratuito, sem compromisso e destinado a clínicas com operação validada.
           </p>
         </div>
 
