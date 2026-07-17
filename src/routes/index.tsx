@@ -198,7 +198,7 @@ function Hero({ setLeadName, utms }: HeroProps) {
             </div>
 
             <h1 className="mt-4 text-[34px] sm:text-[44px] lg:text-[52px] font-black leading-[1.1] tracking-tight text-[#FFFFFF]">
-              Transforme seu tráfego em <span className="text-[#8CFF00]">consultas de Full Face</span> — e as consultas em lucro no procedimento.
+              Colocamos o paciente <span className="text-[#8CFF00]">Full Face</span> sentado na sua frente para você atender.
             </h1>
 
             <p className="mt-5 text-[16px] sm:text-[18px] lg:text-[19px] leading-relaxed text-[#F4F6F1]/90 font-medium max-w-2xl">
